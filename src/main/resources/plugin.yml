@@ -7,7 +7,6 @@ commands:
   pvp:
     description: PVPToggle umbrella command
     usage: /pvp
-    aliases: [ "pvptoggle" ]
 permissions:
   pvptoggle.use:
     description: Allows Toggling PVP
