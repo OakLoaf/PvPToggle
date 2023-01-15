@@ -1,0 +1,14 @@
+name: PVPToggle
+version: ${project.version}
+main: org.beaconmc.pvptoggle.PVPToggle
+softdepend: [PlaceholderAPI]
+api-version: 1.17
+commands:
+  pvp:
+    description: PVPToggle umbrella command
+    usage: /pvp
+    aliases: [ "pvptoggle" ]
+permissions:
+  pvptoggle.use:
+    description: Allows Toggling PVP
+    default: true
