@@ -1,5 +1,6 @@
 # Do you want the plugin to remember a player's last PVP state when the login
 remember-pvp-state: true
+# (Opped users will bypass cooldowns, set the player's "pvptoggle.bypasscooldown" permission to 'false'  to remove bypass)
 # The amount of seconds between toggling pvp
 command-cooldown: 0
 # The amount of seconds between pvp and being able to toggle pvp
