@@ -6,7 +6,7 @@
 
     <groupId>org.beaconmc</groupId>
     <artifactId>PVPToggle</artifactId>
-    <version>1.1-SNAPSHOT</version>
+    <version>1.2-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>PVPToggle</name>
@@ -87,7 +87,7 @@
         <dependency>
             <groupId>com.github.CoolDCB</groupId>
             <artifactId>ChatColorHandler</artifactId>
-            <version>v0.9.9</version>
+            <version>v1.1</version>
         </dependency>
     </dependencies>
 </project>
