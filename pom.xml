@@ -6,7 +6,7 @@
 
     <groupId>org.beaconmc</groupId>
     <artifactId>PVPToggle</artifactId>
-    <version>1.2.1-SNAPSHOT</version>
+    <version>1.2.2</version>
     <packaging>jar</packaging>
 
     <name>PVPToggle</name>
