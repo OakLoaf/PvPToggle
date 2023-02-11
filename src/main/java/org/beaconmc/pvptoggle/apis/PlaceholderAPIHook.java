@@ -7,9 +7,9 @@ import org.bukkit.entity.Player;
 public class PlaceholderAPIHook extends PlaceholderExpansion {
     private final PVPToggle plugin = PVPToggle.getInstance();
 
-    public String onPlaceholderRequest(Player player, String identifier) {
+    public String onPlaceholderRequest(Player player, String params) {
         if (player == null) return "null";
-        if (identifier.equals("pvp_state")) return PVPToggle.dataManager.hasPVPEnabled(player.getUniqueId()) ? PVPToggle.configManager.getPVPDisabledPlaceholder() : PVPToggle.configManager.getPVPEnabledPlaceholder();
+        if (params.equals("pvp_state")) return PVPToggle.dataManager.hasPVPEnabled(player.getUniqueId()) ? PVPToggle.configManager.getPVPDisabledPlaceholder() : PVPToggle.configManager.getPVPEnabledPlaceholder();
         return "null";
     }
 
@@ -22,7 +22,7 @@ public class PlaceholderAPIHook extends PlaceholderExpansion {
     }
 
     public String getIdentifier() {
-        return "PVPToggle";
+        return "pvptoggle";
     }
 
     public String getAuthor() {
