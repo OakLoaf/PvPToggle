@@ -1,8 +1,8 @@
 name: PVPToggle
 version: ${project.version}
-main: org.beaconmc.pvptoggle.PVPToggle
+main: org.beaconmc.pvptoggle.PvpTogglePlugin
 softdepend: [PlaceholderAPI]
-api-version: 1.17
+api-version: 1.16
 commands:
   pvp:
     description: PVPToggle umbrella command

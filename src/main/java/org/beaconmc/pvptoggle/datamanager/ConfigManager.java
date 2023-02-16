@@ -1,35 +1,36 @@
 package org.beaconmc.pvptoggle.datamanager;
 
 import me.dave.chatcolorhandler.ChatColorHandler;
-import org.beaconmc.pvptoggle.PVPToggle;
-import org.bukkit.ChatColor;
+import org.beaconmc.pvptoggle.PvpTogglePlugin;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ConfigManager {
-    private final PVPToggle plugin = PVPToggle.getInstance();
+    private final PvpTogglePlugin plugin = PvpTogglePlugin.getInstance();
     private FileConfiguration config;
-    private final List<String> defaultWorldList;
+    private final List<String> defaultWorldList = new ArrayList<>();
 
     public ConfigManager() {
         plugin.saveDefaultConfig();
         reloadConfig();
-        defaultWorldList = reloadWorldList();
     }
 
     public void reloadConfig() {
         plugin.reloadConfig();
         config = plugin.getConfig();
+        reloadWorldList();
     }
 
-    private List<String> reloadWorldList() {
-        return config.getStringList("worlds");
+    private void reloadWorldList() {
+        defaultWorldList.clear();
+        defaultWorldList.addAll(config.getStringList("worlds"));
     }
 
     // Config sections
-    public boolean isPVPStateRemembered() {
+    public boolean isPvpStateRemembered() {
         return config.getBoolean("remember-pvp-state");
     }
 
@@ -37,7 +38,7 @@ public class ConfigManager {
         return config.getLong("command-cooldown");
     }
 
-    public int getPVPCooldown() {
+    public int getPvpCooldown() {
         return config.getInt("pvp-cooldown");
     }
 
@@ -45,7 +46,7 @@ public class ConfigManager {
         return config.getInt("command-wait");
     }
 
-    public boolean getDefaultPVPMode() {
+    public boolean getDefaultPvpMode() {
         return config.getBoolean("default-pvp");
     }
 
@@ -58,11 +59,11 @@ public class ConfigManager {
     }
 
 
-    public String getPVPEnabledPlaceholder() {
+    public String getPvpEnabledPlaceholder() {
         return config.getString("placeholder-api.pvp-enabled");
     }
 
-    public String getPVPDisabledPlaceholder() {
+    public String getPvpDisabledPlaceholder() {
         return config.getString("placeholder-api.pvp-disabled");
     }
 

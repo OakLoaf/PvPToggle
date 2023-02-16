@@ -1,61 +1,51 @@
 package org.beaconmc.pvptoggle.datamanager;
 
-import org.beaconmc.pvptoggle.PVPToggle;
-import org.beaconmc.pvptoggle.storage.Storage;
-import org.beaconmc.pvptoggle.storage.YmlStorage;
-import org.bukkit.scheduler.BukkitRunnable;
+import org.beaconmc.pvptoggle.PvpTogglePlugin;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
+import org.enchantedskies.EnchantedStorage.IOHandler;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.UUID;
-import java.util.function.Consumer;
+import java.util.concurrent.CompletableFuture;
 
 public class DataManager {
-    private Storage storage;
-    private final HashMap<UUID, Boolean> pvpPlayers = new HashMap<>();
+    private final IOHandler<PvpUser> ioHandler = new IOHandler<>(new YmlStorage());
+    private final HashMap<UUID, PvpUser> uuidToPvpUser = new HashMap<>();
     private final HashSet<UUID> pvpEnabledPlayers = new HashSet<>();
 
-    public void initAsync(Consumer<Boolean> onComplete) {
-        Storage.SERVICE.submit(() -> {
-            storage = new YmlStorage();
-            final boolean init = storage.init();
-            new BukkitRunnable() {
-                @Override
-                public void run() {
-                    onComplete.accept(init);
-                }
-            }.runTask(PVPToggle.getInstance());
+    public CompletableFuture<PvpUser> loadPvpUser(UUID uuid) {
+        return ioHandler.loadPlayer(uuid).thenApply(pvpUser -> {
+            if (!PvpTogglePlugin.getConfigManager().isPvpStateRemembered()) pvpUser.setPvpEnabled(PvpTogglePlugin.getConfigManager().getDefaultPvpMode());
+            uuidToPvpUser.put(uuid, pvpUser);
+            return pvpUser;
         });
     }
 
-    public boolean hasPVPEnabled(UUID uuid) {
-        return pvpPlayers.getOrDefault(uuid, loadPVPUser(uuid));
+    public void savePvpUser(PvpUser user) {
+        ioHandler.savePlayer(user);
     }
 
-    public boolean loadPVPUser(UUID playerUUID) {
-        boolean hasPVPEnabled = storage.hasPVPEnabled(playerUUID);
-        if (!PVPToggle.configManager.isPVPStateRemembered()) hasPVPEnabled = PVPToggle.configManager.getDefaultPVPMode();
-        updatePVPUser(playerUUID, hasPVPEnabled);
-        return hasPVPEnabled;
+    public void unloadPvpUser(UUID uuid) {
+        uuidToPvpUser.remove(uuid);
     }
 
-    public void savePVPUser(UUID playerUUID) {
-        storage.savePVPUser(playerUUID, hasPVPEnabled(playerUUID));
+    public PvpUser getPvpUser(@NotNull UUID uuid) {
+        Player player = Bukkit.getPlayer(uuid);
+        if (player == null) return null;
+
+        PvpUser pvpUser = uuidToPvpUser.get(uuid);
+        if (pvpUser == null) pvpUser = new PvpUser(uuid, player.getName(), PvpTogglePlugin.getConfigManager().getDefaultPvpMode());
+        return pvpUser;
     }
 
-    public void updatePVPUser(UUID uuid, boolean hasPVPEnabled) {
-        if (hasPVPEnabled) pvpEnabledPlayers.add(uuid);
-        else pvpEnabledPlayers.remove(uuid);
-        pvpPlayers.put(uuid, hasPVPEnabled);
-        storage.savePVPUser(uuid, hasPVPEnabled);
-    }
-
-    public void removePVPUser(UUID playerUUID) {
-        pvpPlayers.remove(playerUUID);
-        pvpEnabledPlayers.remove(playerUUID);
-    }
-
-    public HashSet<UUID> getPVPEnabledPlayers() {
+    public HashSet<UUID> getPvpEnabledPlayers() {
         return pvpEnabledPlayers;
+    }
+
+    public IOHandler<PvpUser> getIoHandler() {
+        return ioHandler;
     }
 }

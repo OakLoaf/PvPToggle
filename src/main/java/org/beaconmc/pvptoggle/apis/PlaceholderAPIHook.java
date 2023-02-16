@@ -1,15 +1,15 @@
 package org.beaconmc.pvptoggle.apis;
 
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
-import org.beaconmc.pvptoggle.PVPToggle;
+import org.beaconmc.pvptoggle.PvpTogglePlugin;
 import org.bukkit.entity.Player;
 
 public class PlaceholderAPIHook extends PlaceholderExpansion {
-    private final PVPToggle plugin = PVPToggle.getInstance();
+    private final PvpTogglePlugin plugin = PvpTogglePlugin.getInstance();
 
     public String onPlaceholderRequest(Player player, String params) {
         if (player == null) return "null";
-        if (params.equals("pvp_state")) return PVPToggle.dataManager.hasPVPEnabled(player.getUniqueId()) ? PVPToggle.configManager.getPVPDisabledPlaceholder() : PVPToggle.configManager.getPVPEnabledPlaceholder();
+        if (params.equals("pvp_state")) return PvpTogglePlugin.getDataManager().getPvpUser(player.getUniqueId()).isPvpEnabled() ? PvpTogglePlugin.getConfigManager().getPvpDisabledPlaceholder() : PvpTogglePlugin.getConfigManager().getPvpEnabledPlaceholder();
         return "null";
     }
 

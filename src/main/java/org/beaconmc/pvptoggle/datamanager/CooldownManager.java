@@ -1,6 +1,6 @@
 package org.beaconmc.pvptoggle.datamanager;
 
-import org.beaconmc.pvptoggle.PVPToggle;
+import org.beaconmc.pvptoggle.PvpTogglePlugin;
 import org.bukkit.entity.Player;
 
 import java.time.LocalDateTime;
@@ -56,16 +56,16 @@ public class CooldownManager {
 
         switch (cooldownType.toUpperCase()) {
             case "COMMAND" -> {
-                if (seconds >= PVPToggle.configManager.getCommandCooldown()) {
+                if (seconds >= PvpTogglePlugin.getConfigManager().getCommandCooldown()) {
                     removeCooldown(player, cooldownType);
                     return -1;
-                } else return PVPToggle.configManager.getCommandCooldown() - seconds;
+                } else return PvpTogglePlugin.getConfigManager().getCommandCooldown() - seconds;
             }
             case "PVP" -> {
-                if (seconds >= PVPToggle.configManager.getPVPCooldown()) {
+                if (seconds >= PvpTogglePlugin.getConfigManager().getPvpCooldown()) {
                     removeCooldown(player, cooldownType);
                     return -1;
-                } else return PVPToggle.configManager.getPVPCooldown() - seconds;
+                } else return PvpTogglePlugin.getConfigManager().getPvpCooldown() - seconds;
             }
         }
         return seconds;
