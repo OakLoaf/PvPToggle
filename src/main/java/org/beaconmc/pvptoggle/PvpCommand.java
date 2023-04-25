@@ -19,35 +19,69 @@ public class PvpCommand implements CommandExecutor, TabCompleter {
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        if (!(sender instanceof Player player)) {
-            sender.sendMessage("Console cannot run this command!");
-            return true;
-        }
+//        if (!(sender instanceof Player player)) {
+//            sender.sendMessage("Console cannot run this command!");
+//            return true;
+//        }
 
         if (args.length == 0) {
+            if (!(sender instanceof Player player)) {
+                sender.sendMessage("Console cannot run this command!");
+                return true;
+            }
             PvpTogglePlugin.getConfigManager().sendLangMessage(player, "PVP_STATUS", PvpTogglePlugin.getDataManager().getPvpUser(player.getUniqueId()).isPvpEnabled());
         } else if (args.length == 1) {
             switch (args[0].toLowerCase()) {
-                case "toggle" -> togglePvpCmd(player);
-                case "on" -> togglePvpCmd(player, true);
-                case "off" -> togglePvpCmd(player, false);
-                case "status" -> statusCmd(player);
-                case "help" -> helpCmd(player);
-                case "reload" -> reloadCmd(player);
-                default -> PvpTogglePlugin.getConfigManager().sendLangMessage(player, "COMMAND_INVALID", args[0]);
+                case "toggle" -> {
+                    if (!(sender instanceof Player player)) {
+                        sender.sendMessage("Console cannot run this command!");
+                        return true;
+                    }
+                    togglePvpCmd(player);
+                }
+                case "on" -> {
+                    if (!(sender instanceof Player player)) {
+                        sender.sendMessage("Console cannot run this command!");
+                        return true;
+                    }
+                    togglePvpCmd(player, true);
+                }
+                case "off" -> {
+                    if (!(sender instanceof Player player)) {
+                        sender.sendMessage("Console cannot run this command!");
+                        return true;
+                    }
+                    togglePvpCmd(player, false);
+                }
+                case "status" -> {
+                    if (!(sender instanceof Player player)) {
+                        sender.sendMessage("Console cannot run this command!");
+                        return true;
+                    }
+                    statusCmd(player);
+                }
+                case "help" -> {
+                    if (!(sender instanceof Player player)) {
+                        sender.sendMessage("Console cannot run this command!");
+                        return true;
+                    }
+                    helpCmd(player);
+                }
+                case "reload" -> reloadCmd(sender);
+                default -> PvpTogglePlugin.getConfigManager().sendLangMessage(sender, "COMMAND_INVALID", args[0]);
             }
         } else if (args.length == 2) {
             Player target = Bukkit.getPlayerExact(args[1]);
             if (target == null) {
-                PvpTogglePlugin.getConfigManager().sendLangMessage(player, "UNKNOWN_PLAYER", args[1]);
+                PvpTogglePlugin.getConfigManager().sendLangMessage(sender, "UNKNOWN_PLAYER", args[1]);
                 return true;
             }
             switch (args[0].toLowerCase()) {
-                case "toggle" -> togglePvpCmd(player, target);
-                case "on" -> togglePvpCmd(player, target, true);
-                case "off" -> togglePvpCmd(player, target, false);
-                case "status" -> statusCmd(player, target);
-                default -> PvpTogglePlugin.getConfigManager().sendLangMessage(player, "COMMAND_INVALID", args[0]);
+                case "toggle" -> togglePvpCmd(sender, target);
+                case "on" -> togglePvpCmd(sender, target, true);
+                case "off" -> togglePvpCmd(sender, target, false);
+                case "status" -> statusCmd(sender, target);
+                default -> PvpTogglePlugin.getConfigManager().sendLangMessage(sender, "COMMAND_INVALID", args[0]);
             }
         }
         return true;
@@ -60,20 +94,20 @@ public class PvpCommand implements CommandExecutor, TabCompleter {
         if (player.hasPermission("pvptoggle.admin.others")) PvpTogglePlugin.getConfigManager().sendLangMessage(player, "HELP_SET_OTHERS");
     }
 
-    private void reloadCmd(Player player) {
-        if (!player.hasPermission("pvptoggle.admin.reload")) {
-            PvpTogglePlugin.getConfigManager().sendLangMessage(player, "NO_PERMISSION");
+    private void reloadCmd(CommandSender sender) {
+        if (!sender.hasPermission("pvptoggle.admin.reload")) {
+            PvpTogglePlugin.getConfigManager().sendLangMessage(sender, "NO_PERMISSION");
             return;
         }
         PvpTogglePlugin.getConfigManager().reloadConfig();
-        PvpTogglePlugin.getConfigManager().sendLangMessage(player, "RELOAD_SUCCESS");
+        PvpTogglePlugin.getConfigManager().sendLangMessage(sender, "RELOAD_SUCCESS");
     }
 
     private void statusCmd(Player player) {
         statusCmd(player, player);
     }
 
-    private void statusCmd(Player sender, Player target) {
+    private void statusCmd(CommandSender sender, Player target) {
         if (sender != target) {
             if (!sender.hasPermission("pvptoggle.admin.others")) {
                 PvpTogglePlugin.getConfigManager().sendLangMessage(sender, "NO_PERMISSION");
@@ -91,11 +125,11 @@ public class PvpCommand implements CommandExecutor, TabCompleter {
         togglePvpCmd(player, player, newPvpState);
     }
 
-    private void togglePvpCmd(Player sender, Player target) {
+    private void togglePvpCmd(CommandSender sender, Player target) {
         togglePvpCmd(sender, target, PvpTogglePlugin.getDataManager().getPvpUser(target.getUniqueId()).isPvpEnabled());
     }
 
-    private void togglePvpCmd(Player sender, Player target, boolean newPvpState) {
+    private void togglePvpCmd(CommandSender sender, Player target, boolean newPvpState) {
         if (!sender.hasPermission("pvptoggle.use")) {
             PvpTogglePlugin.getConfigManager().sendLangMessage(sender, "NO_PERMISSION");
             return;
@@ -113,7 +147,11 @@ public class PvpCommand implements CommandExecutor, TabCompleter {
                     PvpTogglePlugin.getConfigManager().sendLangMessage(sender, "COMMAND_RUNNING");
                     return;
                 }
-                long cooldown = PvpTogglePlugin.getCooldownManager().getCooldown(sender);
+                if (!(sender instanceof Player player)) {
+                    sender.sendMessage("Console cannot run this command!");
+                    return;
+                }
+                long cooldown = PvpTogglePlugin.getCooldownManager().getCooldown(player);
                 if (cooldown >= 0) {
                     PvpTogglePlugin.getConfigManager().sendLangMessage(sender, "PVP_COOLDOWN", String.valueOf(cooldown));
                     return;

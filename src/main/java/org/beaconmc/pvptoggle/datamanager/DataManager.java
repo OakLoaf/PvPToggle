@@ -37,7 +37,10 @@ public class DataManager {
         if (player == null) return null;
 
         PvpUser pvpUser = uuidToPvpUser.get(uuid);
-        if (pvpUser == null) pvpUser = new PvpUser(uuid, player.getName(), PvpTogglePlugin.getConfigManager().getDefaultPvpMode());
+        if (pvpUser == null) {
+            pvpUser = new PvpUser(uuid, player.getName(), PvpTogglePlugin.getConfigManager().getDefaultPvpMode());
+            uuidToPvpUser.put(uuid, pvpUser);
+        }
         return pvpUser;
     }
 

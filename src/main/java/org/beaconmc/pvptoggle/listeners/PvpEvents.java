@@ -1,6 +1,7 @@
 package org.beaconmc.pvptoggle.listeners;
 
 import org.beaconmc.pvptoggle.PvpTogglePlugin;
+import org.beaconmc.pvptoggle.datamanager.PvpUser;
 import org.bukkit.Material;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
@@ -19,7 +20,9 @@ public class PvpEvents implements Listener {
     public void onEntityDamageEvent(EntityDamageByEntityEvent event) {
         if (!PvpTogglePlugin.getConfigManager().isWorldEnabled(event.getEntity().getWorld().getName())) return;
         if (!(event.getEntity() instanceof Player attacked)) return;
-        boolean attackedHasPVPEnabled = PvpTogglePlugin.getDataManager().getPvpUser(attacked.getUniqueId()).isPvpEnabled();
+        PvpUser pvpUser = PvpTogglePlugin.getDataManager().getPvpUser(attacked.getUniqueId());
+        if (pvpUser == null) return;
+        boolean attackedHasPVPEnabled = pvpUser.isPvpEnabled();
 
         Entity damageCause = event.getDamager();
         Player damager = null;

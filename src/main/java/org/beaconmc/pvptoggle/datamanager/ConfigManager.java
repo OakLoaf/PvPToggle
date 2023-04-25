@@ -2,6 +2,7 @@ package org.beaconmc.pvptoggle.datamanager;
 
 import me.dave.chatcolorhandler.ChatColorHandler;
 import org.beaconmc.pvptoggle.PvpTogglePlugin;
+import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
@@ -78,19 +79,35 @@ public class ConfigManager {
         return message;
     }
 
-    public void sendLangMessage(Player player, String messageName) {
-        ChatColorHandler.sendMessage(player, getLangMessage(messageName, null, false));
+    public void sendLangMessage(CommandSender sender, String messageName) {
+        ChatColorHandler.sendMessage(sender, getLangMessage(messageName, null, false));
     }
 
-    public void sendLangMessage(Player player, String messageName, String parameter) {
-        ChatColorHandler.sendMessage(player, getLangMessage(messageName, parameter, false));
+    public void sendLangMessage(CommandSender sender, String messageName, String parameter) {
+        ChatColorHandler.sendMessage(sender, getLangMessage(messageName, parameter, false));
     }
 
-    public void sendLangMessage(Player player, String messageName, boolean pvpState) {
-        ChatColorHandler.sendMessage(player, getLangMessage(messageName, null, pvpState));
+    public void sendLangMessage(CommandSender sender, String messageName, boolean pvpState) {
+        ChatColorHandler.sendMessage(sender, getLangMessage(messageName, null, pvpState));
     }
 
-    public void sendLangMessage(Player player, String messageName, String parameter, boolean pvpState) {
-        ChatColorHandler.sendMessage(player, getLangMessage(messageName, parameter, pvpState));
+    public void sendLangMessage(CommandSender sender, String messageName, String parameter, boolean pvpState) {
+        ChatColorHandler.sendMessage(sender, getLangMessage(messageName, parameter, pvpState));
     }
+
+//    public void sendLangMessage(Player player, String messageName) {
+//        ChatColorHandler.sendMessage(player, getLangMessage(messageName, null, false));
+//    }
+//
+//    public void sendLangMessage(Player player, String messageName, String parameter) {
+//        ChatColorHandler.sendMessage(player, getLangMessage(messageName, parameter, false));
+//    }
+//
+//    public void sendLangMessage(Player player, String messageName, boolean pvpState) {
+//        ChatColorHandler.sendMessage(player, getLangMessage(messageName, null, pvpState));
+//    }
+//
+//    public void sendLangMessage(Player player, String messageName, String parameter, boolean pvpState) {
+//        ChatColorHandler.sendMessage(player, getLangMessage(messageName, parameter, pvpState));
+//    }
 }
