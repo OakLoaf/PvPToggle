@@ -48,6 +48,14 @@ public class DataManager {
         return pvpEnabledPlayers;
     }
 
+    public void addPvpEnabledPlayer(UUID uuid) {
+        pvpEnabledPlayers.add(uuid);
+    }
+
+    public void removePvpEnabledPlayer(UUID uuid) {
+        pvpEnabledPlayers.remove(uuid);
+    }
+
     public IOHandler<PvpUser> getIoHandler() {
         return ioHandler;
     }

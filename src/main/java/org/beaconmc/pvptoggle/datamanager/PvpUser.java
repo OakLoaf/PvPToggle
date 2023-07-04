@@ -13,6 +13,8 @@ public class PvpUser {
         this.uuid = uuid;
         this.username = username;
         this.pvpEnabled = pvpEnabled;
+
+        if (pvpEnabled) PvpTogglePlugin.getDataManager().addPvpEnabledPlayer(uuid);
     }
 
     public void setUsername(String username) {
@@ -22,6 +24,10 @@ public class PvpUser {
 
     public void setPvpEnabled(boolean pvpEnabled) {
         this.pvpEnabled = pvpEnabled;
+
+        if (pvpEnabled) PvpTogglePlugin.getDataManager().addPvpEnabledPlayer(uuid);
+        else PvpTogglePlugin.getDataManager().removePvpEnabledPlayer(uuid);
+
         PvpTogglePlugin.getDataManager().savePvpUser(this);
     }
 
