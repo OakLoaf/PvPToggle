@@ -10,6 +10,7 @@ import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashSet;
 import java.util.List;
@@ -34,7 +35,9 @@ public class PlayerEvents implements Listener {
         Bukkit.getScheduler().runTaskTimer(PvpTogglePlugin.getInstance(), () -> {
             HashSet<UUID> pvpEnabledPlayers = PvpTogglePlugin.getDataManager().getPvpEnabledPlayers();
             for (UUID playerUUID : pvpEnabledPlayers) {
-                displayParticles(Bukkit.getPlayer(playerUUID));
+                Player player = Bukkit.getPlayer(playerUUID);
+                if (player != null) displayParticles(player);
+                else PvpTogglePlugin.getDataManager().removePvpEnabledPlayer(playerUUID);
             }
         }, 0, 4);
     }
@@ -64,7 +67,7 @@ public class PlayerEvents implements Listener {
         checkPVPWorld(player);
     }
 
-    private void checkPVPWorld(Player player) {
+    private void checkPVPWorld(@NotNull Player player) {
         UUID playerUUID = player.getUniqueId();
         World world = player.getWorld();
         boolean playerHasPvpEnabled = PvpTogglePlugin.getDataManager().getPvpUser(playerUUID).isPvpEnabled();
@@ -77,7 +80,7 @@ public class PlayerEvents implements Listener {
         }
     }
 
-    private void displayParticles(Player player) {
+    private void displayParticles(@NotNull Player player) {
         int particlesMode = PvpTogglePlugin.getConfigManager().getParticlesDisplayMode();
         switch (particlesMode) {
             case 0 -> player.getWorld().spawnParticle(Particle.REDSTONE, player.getEyeLocation().add(0, 0.5, 0), 0, 0.0D, 1.0D, 0.0D, dustOptions);

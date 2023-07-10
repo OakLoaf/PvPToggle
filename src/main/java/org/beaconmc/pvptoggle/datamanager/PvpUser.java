@@ -13,8 +13,6 @@ public class PvpUser {
         this.uuid = uuid;
         this.username = username;
         this.pvpEnabled = pvpEnabled;
-
-        if (pvpEnabled) PvpTogglePlugin.getDataManager().addPvpEnabledPlayer(uuid);
     }
 
     public void setUsername(String username) {

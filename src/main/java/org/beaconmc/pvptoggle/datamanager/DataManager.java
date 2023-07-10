@@ -20,6 +20,7 @@ public class DataManager {
         return ioHandler.loadPlayer(uuid).thenApply(pvpUser -> {
             if (!PvpTogglePlugin.getConfigManager().isPvpStateRemembered()) pvpUser.setPvpEnabled(PvpTogglePlugin.getConfigManager().getDefaultPvpMode());
             uuidToPvpUser.put(uuid, pvpUser);
+            if (pvpUser.isPvpEnabled()) addPvpEnabledPlayer(uuid);
             return pvpUser;
         });
     }
@@ -30,6 +31,7 @@ public class DataManager {
 
     public void unloadPvpUser(UUID uuid) {
         uuidToPvpUser.remove(uuid);
+        removePvpEnabledPlayer(uuid);
     }
 
     public PvpUser getPvpUser(@NotNull UUID uuid) {
