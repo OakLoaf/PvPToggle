@@ -10,7 +10,7 @@ command-wait: 0
 # Whether or not pvp is enabled for players by default; true - enabled, false - disabled
 default-pvp: true
 # The way in which to display particles; Disabled: -1, Display to all: 0, display to only pvp enabled players: 1
-particles: 0
+particles: -1
 # Worlds which will follow default world rules
 worlds:
   - world_nether
