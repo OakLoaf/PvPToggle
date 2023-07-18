@@ -69,7 +69,7 @@ public class ConfigManager {
 
     public String getLangMessage(String messageName, String parameter, boolean pvpState) {
         String message = config.getString("messages." + messageName.toUpperCase());
-        if (message == null) return null;
+        if (message == null || message.isBlank()) return null;
         if (parameter != null) message = message.replaceAll("<parameter>", parameter);
         if (pvpState) message = message.replaceAll("<pvpstate>", "on");
         else message = message.replaceAll("<pvpstate>", "off");
