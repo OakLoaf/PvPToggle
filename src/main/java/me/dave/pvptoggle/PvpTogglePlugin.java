@@ -1,11 +1,11 @@
-package org.beaconmc.pvptoggle;
+package me.dave.pvptoggle;
 
-import org.beaconmc.pvptoggle.apis.PlaceholderAPIHook;
-import org.beaconmc.pvptoggle.datamanager.ConfigManager;
-import org.beaconmc.pvptoggle.datamanager.CooldownManager;
-import org.beaconmc.pvptoggle.datamanager.DataManager;
-import org.beaconmc.pvptoggle.listeners.PlayerEvents;
-import org.beaconmc.pvptoggle.listeners.PvpEvents;
+import me.dave.pvptoggle.apis.PlaceholderAPIHook;
+import me.dave.pvptoggle.datamanager.ConfigManager;
+import me.dave.pvptoggle.datamanager.CooldownManager;
+import me.dave.pvptoggle.datamanager.DataManager;
+import me.dave.pvptoggle.listeners.PlayerEvents;
+import me.dave.pvptoggle.listeners.PvpEvents;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;

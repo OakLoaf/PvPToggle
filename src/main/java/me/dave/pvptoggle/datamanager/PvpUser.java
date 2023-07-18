@@ -1,6 +1,6 @@
-package org.beaconmc.pvptoggle.datamanager;
+package me.dave.pvptoggle.datamanager;
 
-import org.beaconmc.pvptoggle.PvpTogglePlugin;
+import me.dave.pvptoggle.PvpTogglePlugin;
 
 import java.util.UUID;
 

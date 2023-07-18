@@ -1,7 +1,7 @@
-package org.beaconmc.pvptoggle.listeners;
+package me.dave.pvptoggle.listeners;
 
-import org.beaconmc.pvptoggle.PvpTogglePlugin;
-import org.beaconmc.pvptoggle.datamanager.PvpUser;
+import me.dave.pvptoggle.PvpTogglePlugin;
+import me.dave.pvptoggle.datamanager.PvpUser;
 import org.bukkit.Material;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;

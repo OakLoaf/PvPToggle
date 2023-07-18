@@ -1,6 +1,6 @@
-package org.beaconmc.pvptoggle.datamanager;
+package me.dave.pvptoggle.datamanager;
 
-import org.beaconmc.pvptoggle.PvpTogglePlugin;
+import me.dave.pvptoggle.PvpTogglePlugin;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;

@@ -1,6 +1,6 @@
-package org.beaconmc.pvptoggle;
+package me.dave.pvptoggle;
 
-import org.beaconmc.pvptoggle.datamanager.PvpUser;
+import me.dave.pvptoggle.datamanager.PvpUser;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;

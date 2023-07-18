@@ -1,7 +1,7 @@
-package org.beaconmc.pvptoggle.apis;
+package me.dave.pvptoggle.apis;
 
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
-import org.beaconmc.pvptoggle.PvpTogglePlugin;
+import me.dave.pvptoggle.PvpTogglePlugin;
 import org.bukkit.entity.Player;
 
 public class PlaceholderAPIHook extends PlaceholderExpansion {
