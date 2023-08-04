@@ -9,7 +9,7 @@ public class PlaceholderAPIHook extends PlaceholderExpansion {
 
     public String onPlaceholderRequest(Player player, String params) {
         if (player == null) return "null";
-        if (params.equals("pvp_state")) return PvpTogglePlugin.getDataManager().getPvpUser(player.getUniqueId()).isPvpEnabled() ? PvpTogglePlugin.getConfigManager().getPvpEnabledPlaceholder() : PvpTogglePlugin.getConfigManager().getPvpDisabledPlaceholder();
+        if (params.equals("pvp_state")) return PvpTogglePlugin.getDataManager().getPvpUser(player).isPvpEnabled() ? PvpTogglePlugin.getConfigManager().getPvpEnabledPlaceholder() : PvpTogglePlugin.getConfigManager().getPvpDisabledPlaceholder();
         return "null";
     }
 

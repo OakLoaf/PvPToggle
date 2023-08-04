@@ -1,7 +1,6 @@
 package me.dave.pvptoggle.datamanager;
 
 import me.dave.pvptoggle.PvpTogglePlugin;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.enchantedskies.EnchantedStorage.IOHandler;
 import org.jetbrains.annotations.NotNull;

@@ -68,9 +68,8 @@ public class PlayerEvents implements Listener {
     }
 
     private void checkPVPWorld(@NotNull Player player) {
-        UUID playerUUID = player.getUniqueId();
         World world = player.getWorld();
-        boolean playerHasPvpEnabled = PvpTogglePlugin.getDataManager().getPvpUser(playerUUID).isPvpEnabled();
+        boolean playerHasPvpEnabled = PvpTogglePlugin.getDataManager().getPvpUser(player).isPvpEnabled();
         if (!world.getPVP() && !playerHasPvpEnabled) {
             PvpTogglePlugin.getConfigManager().sendLangMessage(player, "PVP_WORLD_CHANGE_DISABLED");
             return;
