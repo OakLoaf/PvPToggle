@@ -16,6 +16,17 @@ public class DataManager {
     private final HashMap<UUID, PvpUser> uuidToPvpUser = new HashMap<>();
     private final HashSet<UUID> pvpEnabledPlayers = new HashSet<>();
 
+    public PvpUser getPvpUser(@NotNull Player player) {
+        UUID uuid = player.getUniqueId();
+
+        PvpUser pvpUser = uuidToPvpUser.get(uuid);
+        if (pvpUser == null) {
+            pvpUser = new PvpUser(uuid, player.getName(), PvpTogglePlugin.getConfigManager().getDefaultPvpMode());
+            uuidToPvpUser.put(uuid, pvpUser);
+        }
+        return pvpUser;
+    }
+
     public CompletableFuture<PvpUser> loadPvpUser(UUID uuid) {
         return ioHandler.loadPlayer(uuid).thenApply(pvpUser -> {
             if (!PvpTogglePlugin.getConfigManager().isPvpStateRemembered()) pvpUser.setPvpEnabled(PvpTogglePlugin.getConfigManager().getDefaultPvpMode());
@@ -25,25 +36,13 @@ public class DataManager {
         });
     }
 
-    public void savePvpUser(PvpUser user) {
-        ioHandler.savePlayer(user);
-    }
-
     public void unloadPvpUser(UUID uuid) {
         uuidToPvpUser.remove(uuid);
         removePvpEnabledPlayer(uuid);
     }
 
-    public PvpUser getPvpUser(@NotNull UUID uuid) {
-        Player player = Bukkit.getPlayer(uuid);
-        if (player == null) return null;
-
-        PvpUser pvpUser = uuidToPvpUser.get(uuid);
-        if (pvpUser == null) {
-            pvpUser = new PvpUser(uuid, player.getName(), PvpTogglePlugin.getConfigManager().getDefaultPvpMode());
-            uuidToPvpUser.put(uuid, pvpUser);
-        }
-        return pvpUser;
+    public void savePvpUser(PvpUser user) {
+        ioHandler.savePlayer(user);
     }
 
     public HashSet<UUID> getPvpEnabledPlayers() {
