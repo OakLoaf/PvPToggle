@@ -1,9 +1,11 @@
 package me.dave.pvptoggle;
 
-import me.dave.pvptoggle.apis.PlaceholderAPIHook;
+import me.dave.pvptoggle.hooks.custom.PlaceholderAPIHook;
+import me.dave.pvptoggle.hooks.custom.WorldGuardHook;
 import me.dave.pvptoggle.datamanager.ConfigManager;
 import me.dave.pvptoggle.datamanager.CooldownManager;
 import me.dave.pvptoggle.datamanager.DataManager;
+import me.dave.pvptoggle.hooks.Hooks;
 import me.dave.pvptoggle.listeners.PlayerEvents;
 import me.dave.pvptoggle.listeners.PvpEvents;
 import org.bukkit.event.Listener;
@@ -32,8 +34,8 @@ public final class PvpTogglePlugin extends JavaPlugin {
         getCommand("pvp").setExecutor(new PvpCommand());
 
         PluginManager pluginManager = getServer().getPluginManager();
-        if (pluginManager.getPlugin("PlaceholderAPI") != null) new PlaceholderAPIHook().register();
-        else getLogger().info("PlaceholderAPI plugin not found. Continuing without PlaceholderAPI.");
+        if (pluginManager.getPlugin("PlaceholderAPI") != null) Hooks.register("PlaceholderAPI", new PlaceholderAPIHook());
+        if (pluginManager.getPlugin("WorldGuard") != null) Hooks.register("WorldGuard", new WorldGuardHook());
     }
 
     @Override
