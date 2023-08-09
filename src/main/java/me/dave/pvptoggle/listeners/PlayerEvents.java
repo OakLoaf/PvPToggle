@@ -1,10 +1,8 @@
 package me.dave.pvptoggle.listeners;
 
 import me.dave.pvptoggle.PvpTogglePlugin;
-import me.dave.pvptoggle.hooks.Hooks;
-import me.dave.pvptoggle.hooks.custom.WorldGuardHook;
+import me.dave.pvptoggle.hooks.WorldGuardHook;
 import org.bukkit.*;
-import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -76,9 +74,7 @@ public class PlayerEvents implements Listener {
         if (!PvpTogglePlugin.getConfigManager().isWorldEnabled(event.getPlayer().getWorld().getName())) return;
         if (event.getTo() == null || event.getFrom().getBlock().equals(event.getTo().getBlock())) return;
 
-        if (Hooks.isHookRegistered("WorldGuard")) {
-            WorldGuardHook wgHook = (WorldGuardHook) Hooks.getHook("WorldGuard");
-
+        if (PvpTogglePlugin.getHook("WorldGuard") instanceof WorldGuardHook wgHook) {
             Player player = event.getPlayer();
             if (wgHook.isRegionEnabled(player.getWorld(), event.getFrom()) != wgHook.isRegionEnabled(player.getWorld(), event.getTo())) {
                 Bukkit.getScheduler().runTaskLater(plugin, () -> wgHook.checkPvpRegion(player), 1);

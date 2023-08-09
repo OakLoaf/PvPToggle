@@ -1,4 +1,4 @@
-package me.dave.pvptoggle.hooks.custom;
+package me.dave.pvptoggle.hooks;
 
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import me.dave.pvptoggle.PvpTogglePlugin;

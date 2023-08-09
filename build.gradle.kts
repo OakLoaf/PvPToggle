@@ -23,7 +23,7 @@ dependencies {
     compileOnly("me.clip:placeholderapi:2.11.2")
     compileOnly("com.sk89q.worldguard:worldguard-bukkit:7.0.9")
     shadow(files("libs/EnchantedStorage.jar"))
-    shadow("com.github.CoolDCB:ChatColorHandler:e5741e8575")
+    shadow("com.github.CoolDCB:ChatColorHandler:v2.1.0")
 }
 
 java {
