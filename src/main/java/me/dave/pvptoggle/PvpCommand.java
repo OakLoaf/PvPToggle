@@ -19,11 +19,6 @@ public class PvpCommand implements CommandExecutor, TabCompleter {
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-//        if (!(sender instanceof Player player)) {
-//            sender.sendMessage("Console cannot run this command!");
-//            return true;
-//        }
-
         if (args.length == 0) {
             if (!(sender instanceof Player player)) {
                 sender.sendMessage("Console cannot run this command!");

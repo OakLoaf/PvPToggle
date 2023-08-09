@@ -4,6 +4,7 @@ import me.dave.pvptoggle.PvpTogglePlugin;
 import me.dave.pvptoggle.hooks.Hooks;
 import me.dave.pvptoggle.hooks.custom.WorldGuardHook;
 import org.bukkit.*;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -72,14 +73,15 @@ public class PlayerEvents implements Listener {
 
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent event) {
-        if (event.getTo() == null || event.getFrom().getBlock() != event.getTo().getBlock()) return;
+        if (!PvpTogglePlugin.getConfigManager().isWorldEnabled(event.getPlayer().getWorld().getName())) return;
+        if (event.getTo() == null || event.getFrom().getBlock().equals(event.getTo().getBlock())) return;
 
         if (Hooks.isHookRegistered("WorldGuard")) {
             WorldGuardHook wgHook = (WorldGuardHook) Hooks.getHook("WorldGuard");
 
             Player player = event.getPlayer();
             if (wgHook.isRegionEnabled(player.getWorld(), event.getFrom()) != wgHook.isRegionEnabled(player.getWorld(), event.getTo())) {
-                wgHook.checkPvpRegion(player);
+                Bukkit.getScheduler().runTaskLater(plugin, () -> wgHook.checkPvpRegion(player), 1);
             }
         }
     }

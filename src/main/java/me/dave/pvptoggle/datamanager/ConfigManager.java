@@ -2,6 +2,10 @@ package me.dave.pvptoggle.datamanager;
 
 import me.dave.chatcolorhandler.ChatColorHandler;
 import me.dave.pvptoggle.PvpTogglePlugin;
+import me.dave.pvptoggle.hooks.Hooks;
+import me.dave.pvptoggle.hooks.custom.WorldGuardHook;
+import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 
@@ -52,6 +56,17 @@ public class ConfigManager {
 
     public int getParticlesDisplayMode() {
         return config.getInt("particles");
+    }
+
+    public boolean isPluginEnabledAt(World world, Location location) {
+        if (!isWorldEnabled(world.getName())) return false;
+
+        if (Hooks.isHookRegistered("WorldGuard")) {
+            WorldGuardHook wgHook = (WorldGuardHook) Hooks.getHook("WorldGuard");
+            return wgHook.isRegionEnabled(world, location);
+        }
+
+        return false;
     }
 
     public boolean isWorldEnabled(String worldName) {

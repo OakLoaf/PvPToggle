@@ -20,7 +20,7 @@ public final class PvpTogglePlugin extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        plugin = this;
+//        plugin = this;
         cooldownManager = new CooldownManager();
         configManager = new ConfigManager();
         dataManager = new DataManager();
@@ -35,6 +35,12 @@ public final class PvpTogglePlugin extends JavaPlugin {
 
         PluginManager pluginManager = getServer().getPluginManager();
         if (pluginManager.getPlugin("PlaceholderAPI") != null) Hooks.register("PlaceholderAPI", new PlaceholderAPIHook());
+    }
+
+    @Override
+    public void onLoad() {
+        plugin = this;
+        PluginManager pluginManager = getServer().getPluginManager();
         if (pluginManager.getPlugin("WorldGuard") != null) Hooks.register("WorldGuard", new WorldGuardHook());
     }
 

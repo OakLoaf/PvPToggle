@@ -18,7 +18,7 @@ public class PvpEvents implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void onEntityDamageEvent(EntityDamageByEntityEvent event) {
-        if (!PvpTogglePlugin.getConfigManager().isWorldEnabled(event.getEntity().getWorld().getName())) return;
+        if (!PvpTogglePlugin.getConfigManager().isPluginEnabledAt(event.getEntity().getWorld(), event.getEntity().getLocation())) return;
         if (!(event.getEntity() instanceof Player attacked)) return;
         PvpUser pvpUser = PvpTogglePlugin.getDataManager().getPvpUser(attacked);
         if (pvpUser == null) return;
@@ -57,7 +57,7 @@ public class PvpEvents implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void onFlameArrow(EntityCombustByEntityEvent event) {
-        if (!PvpTogglePlugin.getConfigManager().isWorldEnabled(event.getEntity().getWorld().getName())) return;
+        if (!PvpTogglePlugin.getConfigManager().isPluginEnabledAt(event.getEntity().getWorld(), event.getEntity().getLocation())) return;
         if (!(event.getCombuster() instanceof Arrow arrow)) return;
         if (!(arrow.getShooter() instanceof Player damager) || !(event.getEntity() instanceof Player attacked)) return;
         boolean damagerHasPVPEnabled = PvpTogglePlugin.getDataManager().getPvpUser(damager).isPvpEnabled();
@@ -76,7 +76,7 @@ public class PvpEvents implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void onPotionSplash(PotionSplashEvent event) {
-        if (!PvpTogglePlugin.getConfigManager().isWorldEnabled(event.getEntity().getWorld().getName())) return;
+        if (!PvpTogglePlugin.getConfigManager().isPluginEnabledAt(event.getEntity().getWorld(), event.getEntity().getLocation())) return;
         if (!(event.getPotion().getShooter() instanceof Player damager)) return;
         boolean damagerHasPVPEnabled = PvpTogglePlugin.getDataManager().getPvpUser(damager).isPvpEnabled();
         if (!damagerHasPVPEnabled) {
@@ -103,7 +103,7 @@ public class PvpEvents implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void onCloudEffects(AreaEffectCloudApplyEvent event) {
-        if (!PvpTogglePlugin.getConfigManager().isWorldEnabled(event.getEntity().getWorld().getName())) return;
+        if (!PvpTogglePlugin.getConfigManager().isPluginEnabledAt(event.getEntity().getWorld(), event.getEntity().getLocation())) return;
         if (!(event.getEntity().getSource() instanceof Player damager)) return;
         boolean damagerHasPVPEnabled = PvpTogglePlugin.getDataManager().getPvpUser(damager).isPvpEnabled();
         if (!damagerHasPVPEnabled) {
@@ -130,9 +130,11 @@ public class PvpEvents implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void onPlayerFishing(PlayerFishEvent event) {
-        if (!PvpTogglePlugin.getConfigManager().isWorldEnabled(event.getPlayer().getWorld().getName())) return;
+        Entity caught = event.getCaught();
+        if (caught == null) return;
+        if (!PvpTogglePlugin.getConfigManager().isPluginEnabledAt(caught.getWorld(), caught.getLocation())) return;
         Player damager = event.getPlayer();
-        if (!(event.getCaught() instanceof Player attacked)) return;
+        if (!(caught instanceof Player attacked)) return;
         if (damager.getInventory().getItemInMainHand().getType() != Material.FISHING_ROD && damager.getInventory().getItemInOffHand().getType() != Material.FISHING_ROD) return;
         boolean damagerHasPVPEnabled = PvpTogglePlugin.getDataManager().getPvpUser(damager).isPvpEnabled();
         boolean attackedHasPVPEnabled = PvpTogglePlugin.getDataManager().getPvpUser(attacked).isPvpEnabled();

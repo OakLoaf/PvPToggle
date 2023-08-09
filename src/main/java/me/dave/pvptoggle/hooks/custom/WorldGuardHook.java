@@ -10,27 +10,32 @@ import com.sk89q.worldguard.protection.flags.StateFlag;
 import com.sk89q.worldguard.protection.flags.registry.FlagConflictException;
 import com.sk89q.worldguard.protection.flags.registry.FlagRegistry;
 import com.sk89q.worldguard.protection.managers.RegionManager;
+import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import com.sk89q.worldguard.protection.regions.RegionContainer;
 import me.dave.pvptoggle.PvpTogglePlugin;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Listener;
 import org.jetbrains.annotations.NotNull;
 
-public class WorldGuardHook extends Hook {
-    private static StateFlag DISABLE_PVP_TOGGLE_FLAG;
+import java.util.Comparator;
+import java.util.List;
+
+public class WorldGuardHook extends Hook implements Listener {
+    private static StateFlag PVP_TOGGLE_FLAG;
 
     @Override
     public void onEnable() {
         FlagRegistry registry = WorldGuard.getInstance().getFlagRegistry();
         try {
-            StateFlag flag = new StateFlag("disable-pvp-toggle-flag", false);
+            StateFlag flag = new StateFlag("pvp-toggle", true);
             registry.register(flag);
-            DISABLE_PVP_TOGGLE_FLAG = flag;
+            PVP_TOGGLE_FLAG = flag;
         } catch (FlagConflictException e) {
-            Flag<?> existing = registry.get("disable-pvp-toggle-flag");
+            Flag<?> existing = registry.get("pvp-toggle");
             if (existing instanceof StateFlag) {
-                DISABLE_PVP_TOGGLE_FLAG = (StateFlag) existing;
+                PVP_TOGGLE_FLAG = (StateFlag) existing;
             }
         }
     }
@@ -40,37 +45,31 @@ public class WorldGuardHook extends Hook {
 
     public void checkPvpRegion(@NotNull Player player) {
         World world = player.getWorld();
-        boolean playerHasPvpEnabled = PvpTogglePlugin.getDataManager().getPvpUser(player).isPvpEnabled();
-        if (!isRegionEnabled(player) && !playerHasPvpEnabled) {
-            PvpTogglePlugin.getConfigManager().sendLangMessage(player, "PVP_REGION_CHANGE_DISABLED");
-            return;
-        }
-        if (!PvpTogglePlugin.getConfigManager().isWorldEnabled(world.getName()) && isRegionEnabled(player) && playerHasPvpEnabled) {
-            PvpTogglePlugin.getConfigManager().sendLangMessage(player, "PVP_REGION_CHANGE_REQUIRED");
+        if (PvpTogglePlugin.getConfigManager().isWorldEnabled(world.getName())) {
+            if (isRegionEnabled(player)) {
+                PvpTogglePlugin.getConfigManager().sendLangMessage(player, "PVP_REGION_ENABLED");
+            }
+            else {
+                PvpTogglePlugin.getConfigManager().sendLangMessage(player, "PVP_REGION_DISABLED");
+            }
         }
     }
 
     public boolean isRegionEnabled(@NotNull Player player) {
-        RegionContainer container = WorldGuard.getInstance().getPlatform().getRegionContainer();
-        RegionManager regions = container.get(BukkitAdapter.adapt(player.getWorld()));
-        if (regions == null) return false;
-
-        ApplicableRegionSet set = regions.getApplicableRegions(BukkitAdapter.adapt(player.getLocation()).toVector().toBlockPoint());
-        LocalPlayer localPlayer = WorldGuardPlugin.inst().wrapPlayer(player);
-        StateFlag.State flag = set.queryValue(localPlayer, DISABLE_PVP_TOGGLE_FLAG);
-        if (flag == null) return false;
-
-        return flag.equals(StateFlag.State.ALLOW);
+        return isRegionEnabled(player.getWorld(), player.getLocation());
     }
 
     public boolean isRegionEnabled(@NotNull World world, @NotNull Location location) {
         RegionContainer container = WorldGuard.getInstance().getPlatform().getRegionContainer();
-        RegionManager regions = container.get(BukkitAdapter.adapt(world));
-        if (regions == null) return false;
+        RegionManager regionManager = container.get(BukkitAdapter.adapt(world));
+        if (regionManager == null) return true;
 
-        ApplicableRegionSet set = regions.getApplicableRegions(BukkitAdapter.adapt(location).toVector().toBlockPoint());
-        StateFlag.State flag = set.queryValue(null, DISABLE_PVP_TOGGLE_FLAG);
-        if (flag == null) return false;
+        ApplicableRegionSet set = regionManager.getApplicableRegions(BukkitAdapter.adapt(location).toVector().toBlockPoint());
+        List<ProtectedRegion> regions = set.getRegions().stream().sorted(Comparator.comparing(ProtectedRegion::getPriority)).toList();
+        if (regions.size() == 0) return true;
+        ProtectedRegion region = regions.get(0);
+        StateFlag.State flag = region.getFlag(PVP_TOGGLE_FLAG);
+        if (flag == null) return true;
 
         return flag.equals(StateFlag.State.ALLOW);
     }
