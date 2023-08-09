@@ -130,7 +130,7 @@ public class PvpEvents implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void onPlayerFishing(PlayerFishEvent event) {
-        if (PvpTogglePlugin.getConfigManager().isWorldEnabled(event.getPlayer().getWorld().getName())) return;
+        if (!PvpTogglePlugin.getConfigManager().isWorldEnabled(event.getPlayer().getWorld().getName())) return;
         Player damager = event.getPlayer();
         if (!(event.getCaught() instanceof Player attacked)) return;
         if (damager.getInventory().getItemInMainHand().getType() != Material.FISHING_ROD && damager.getInventory().getItemInOffHand().getType() != Material.FISHING_ROD) return;
