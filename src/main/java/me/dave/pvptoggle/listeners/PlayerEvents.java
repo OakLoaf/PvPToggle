@@ -1,6 +1,8 @@
 package me.dave.pvptoggle.listeners;
 
 import me.dave.pvptoggle.PvpTogglePlugin;
+import me.dave.pvptoggle.hooks.Hooks;
+import me.dave.pvptoggle.hooks.custom.WorldGuardHook;
 import org.bukkit.*;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -8,6 +10,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
@@ -27,7 +30,7 @@ public class PlayerEvents implements Listener {
             PvpTogglePlugin.getDataManager().loadPvpUser(player.getUniqueId()).thenAccept((ignored) -> new BukkitRunnable() {
                 @Override
                 public void run() {
-                    checkPVPWorld(player);
+                    checkPvpWorld(player);
                 }
             }.runTask(plugin));
         }
@@ -50,7 +53,7 @@ public class PlayerEvents implements Listener {
             @Override
             public void run() {
                 pvpUser.setUsername(player.getName());
-                checkPVPWorld(player);
+                checkPvpWorld(player);
             }
         }.runTask(plugin));
     }
@@ -64,10 +67,24 @@ public class PlayerEvents implements Listener {
     @EventHandler
     public void onChangeWorld(PlayerChangedWorldEvent event) {
         Player player = event.getPlayer();
-        checkPVPWorld(player);
+        checkPvpWorld(player);
     }
 
-    private void checkPVPWorld(@NotNull Player player) {
+    @EventHandler
+    public void onPlayerMove(PlayerMoveEvent event) {
+        if (event.getTo() == null || event.getFrom().getBlock() != event.getTo().getBlock()) return;
+
+        if (Hooks.isHookRegistered("WorldGuard")) {
+            WorldGuardHook wgHook = (WorldGuardHook) Hooks.getHook("WorldGuard");
+
+            Player player = event.getPlayer();
+            if (wgHook.isRegionEnabled(player.getWorld(), event.getFrom()) != wgHook.isRegionEnabled(player.getWorld(), event.getTo())) {
+                wgHook.checkPvpRegion(player);
+            }
+        }
+    }
+
+    private void checkPvpWorld(@NotNull Player player) {
         World world = player.getWorld();
         boolean playerHasPvpEnabled = PvpTogglePlugin.getDataManager().getPvpUser(player).isPvpEnabled();
         if (!world.getPVP() && !playerHasPvpEnabled) {

@@ -13,15 +13,17 @@ repositories {
     mavenLocal()
     maven { url = uri("https://hub.spigotmc.org/nexus/content/repositories/snapshots/") }
     maven { url = uri("https://oss.sonatype.org/content/groups/public/") }
-    maven { url = uri("https://repo.extendedclip.com/content/repositories/placeholderapi/")}
+    maven { url = uri("https://repo.extendedclip.com/content/repositories/placeholderapi/") }
+    maven { url = uri("https://maven.enginehub.org/repo/") }
     maven { url = uri("https://jitpack.io") }
 }
 
 dependencies {
     compileOnly("org.spigotmc:spigot-api:1.20-R0.1-SNAPSHOT")
     compileOnly("me.clip:placeholderapi:2.11.2")
+    compileOnly("com.sk89q.worldguard:worldguard-bukkit:7.0.9")
     shadow(files("libs/EnchantedStorage.jar"))
-    shadow("com.github.CoolDCB:ChatColorHandler:v2.0.0")
+    shadow("com.github.CoolDCB:ChatColorHandler:e5741e8575")
 }
 
 java {
