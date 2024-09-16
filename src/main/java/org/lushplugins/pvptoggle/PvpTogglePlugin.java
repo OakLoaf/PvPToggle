@@ -3,7 +3,7 @@ package org.lushplugins.pvptoggle;
 import org.lushplugins.pvptoggle.hooks.Hook;
 import org.lushplugins.pvptoggle.hooks.PlaceholderAPIHook;
 import org.lushplugins.pvptoggle.hooks.WorldGuardHook;
-import org.lushplugins.pvptoggle.datamanager.ConfigManager;
+import org.lushplugins.pvptoggle.config.ConfigManager;
 import org.lushplugins.pvptoggle.datamanager.CooldownManager;
 import org.lushplugins.pvptoggle.datamanager.DataManager;
 import org.lushplugins.pvptoggle.listeners.PlayerEvents;

@@ -1,4 +1,4 @@
-package org.lushplugins.pvptoggle.datamanager;
+package org.lushplugins.pvptoggle.config;
 
 import me.dave.chatcolorhandler.ChatColorHandler;
 import org.lushplugins.pvptoggle.PvpTogglePlugin;
