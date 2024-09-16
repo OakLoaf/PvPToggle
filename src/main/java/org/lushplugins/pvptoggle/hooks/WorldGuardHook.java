@@ -1,4 +1,4 @@
-package me.dave.pvptoggle.hooks;
+package org.lushplugins.pvptoggle.hooks;
 
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldguard.WorldGuard;
@@ -10,7 +10,7 @@ import com.sk89q.worldguard.protection.flags.registry.FlagRegistry;
 import com.sk89q.worldguard.protection.managers.RegionManager;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import com.sk89q.worldguard.protection.regions.RegionContainer;
-import me.dave.pvptoggle.PvpTogglePlugin;
+import org.lushplugins.pvptoggle.PvpTogglePlugin;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;

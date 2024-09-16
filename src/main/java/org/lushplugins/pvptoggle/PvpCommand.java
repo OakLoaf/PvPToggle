@@ -1,6 +1,6 @@
-package me.dave.pvptoggle;
+package org.lushplugins.pvptoggle;
 
-import me.dave.pvptoggle.datamanager.PvpUser;
+import org.lushplugins.pvptoggle.datamanager.PvpUser;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;

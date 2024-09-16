@@ -1,7 +1,7 @@
-package me.dave.pvptoggle.listeners;
+package org.lushplugins.pvptoggle.listeners;
 
-import me.dave.pvptoggle.PvpTogglePlugin;
-import me.dave.pvptoggle.hooks.WorldGuardHook;
+import org.lushplugins.pvptoggle.PvpTogglePlugin;
+import org.lushplugins.pvptoggle.hooks.WorldGuardHook;
 import org.bukkit.*;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;

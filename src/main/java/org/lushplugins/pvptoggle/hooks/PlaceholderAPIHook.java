@@ -1,7 +1,7 @@
-package me.dave.pvptoggle.hooks;
+package org.lushplugins.pvptoggle.hooks;
 
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
-import me.dave.pvptoggle.PvpTogglePlugin;
+import org.lushplugins.pvptoggle.PvpTogglePlugin;
 import org.bukkit.entity.Player;
 
 public class PlaceholderAPIHook extends Hook {

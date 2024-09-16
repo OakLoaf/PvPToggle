@@ -1,13 +1,13 @@
-package me.dave.pvptoggle;
+package org.lushplugins.pvptoggle;
 
-import me.dave.pvptoggle.hooks.Hook;
-import me.dave.pvptoggle.hooks.PlaceholderAPIHook;
-import me.dave.pvptoggle.hooks.WorldGuardHook;
-import me.dave.pvptoggle.datamanager.ConfigManager;
-import me.dave.pvptoggle.datamanager.CooldownManager;
-import me.dave.pvptoggle.datamanager.DataManager;
-import me.dave.pvptoggle.listeners.PlayerEvents;
-import me.dave.pvptoggle.listeners.PvpEvents;
+import org.lushplugins.pvptoggle.hooks.Hook;
+import org.lushplugins.pvptoggle.hooks.PlaceholderAPIHook;
+import org.lushplugins.pvptoggle.hooks.WorldGuardHook;
+import org.lushplugins.pvptoggle.datamanager.ConfigManager;
+import org.lushplugins.pvptoggle.datamanager.CooldownManager;
+import org.lushplugins.pvptoggle.datamanager.DataManager;
+import org.lushplugins.pvptoggle.listeners.PlayerEvents;
+import org.lushplugins.pvptoggle.listeners.PvpEvents;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;

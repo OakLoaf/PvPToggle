@@ -1,13 +1,12 @@
 name: PVPToggle
 version: ${project.version}
-main: me.dave.pvptoggle.PvpTogglePlugin
+main: org.lushplugins.pvptoggle.PvpTogglePlugin
 api-version: 1.16
 softdepend:
   - PlaceholderAPI
   - WorldGuard
 commands:
   pvp:
-    description: PVPToggle umbrella command
     usage: /pvp
 permissions:
   pvptoggle.use:

@@ -1,6 +1,6 @@
-package me.dave.pvptoggle.datamanager;
+package org.lushplugins.pvptoggle.datamanager;
 
-import me.dave.pvptoggle.PvpTogglePlugin;
+import org.lushplugins.pvptoggle.PvpTogglePlugin;
 import org.bukkit.entity.Player;
 
 import java.time.LocalDateTime;

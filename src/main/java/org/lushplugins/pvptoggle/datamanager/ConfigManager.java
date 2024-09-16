@@ -1,8 +1,8 @@
-package me.dave.pvptoggle.datamanager;
+package org.lushplugins.pvptoggle.datamanager;
 
 import me.dave.chatcolorhandler.ChatColorHandler;
-import me.dave.pvptoggle.PvpTogglePlugin;
-import me.dave.pvptoggle.hooks.WorldGuardHook;
+import org.lushplugins.pvptoggle.PvpTogglePlugin;
+import org.lushplugins.pvptoggle.hooks.WorldGuardHook;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;

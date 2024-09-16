@@ -1,4 +1,4 @@
-package me.dave.pvptoggle.hooks;
+package org.lushplugins.pvptoggle.hooks;
 
 public abstract class Hook {
     private boolean enabled = false;

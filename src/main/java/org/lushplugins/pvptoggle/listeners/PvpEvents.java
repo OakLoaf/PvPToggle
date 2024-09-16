@@ -1,7 +1,7 @@
-package me.dave.pvptoggle.listeners;
+package org.lushplugins.pvptoggle.listeners;
 
-import me.dave.pvptoggle.PvpTogglePlugin;
-import me.dave.pvptoggle.datamanager.PvpUser;
+import org.lushplugins.pvptoggle.PvpTogglePlugin;
+import org.lushplugins.pvptoggle.datamanager.PvpUser;
 import org.bukkit.Material;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
