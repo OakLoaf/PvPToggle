@@ -10,7 +10,7 @@ import com.sk89q.worldguard.protection.flags.registry.FlagRegistry;
 import com.sk89q.worldguard.protection.managers.RegionManager;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import com.sk89q.worldguard.protection.regions.RegionContainer;
-import org.lushplugins.pvptoggle.PvpTogglePlugin;
+import org.lushplugins.pvptoggle.PvPToggle;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -43,12 +43,12 @@ public class WorldGuardHook extends Hook implements Listener {
 
     public void checkPvpRegion(@NotNull Player player) {
         World world = player.getWorld();
-        if (PvpTogglePlugin.getConfigManager().isWorldEnabled(world.getName())) {
+        if (PvPToggle.getConfigManager().isWorldEnabled(world.getName())) {
             if (isRegionEnabled(player)) {
-                PvpTogglePlugin.getConfigManager().sendLangMessage(player, "PVP_REGION_ENABLED");
+                PvPToggle.getConfigManager().sendLangMessage(player, "PVP_REGION_ENABLED");
             }
             else {
-                PvpTogglePlugin.getConfigManager().sendLangMessage(player, "PVP_REGION_DISABLED");
+                PvPToggle.getConfigManager().sendLangMessage(player, "PVP_REGION_DISABLED");
             }
         }
     }

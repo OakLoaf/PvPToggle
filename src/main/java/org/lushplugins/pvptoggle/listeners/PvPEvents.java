@@ -1,7 +1,7 @@
 package org.lushplugins.pvptoggle.listeners;
 
-import org.lushplugins.pvptoggle.PvpTogglePlugin;
-import org.lushplugins.pvptoggle.datamanager.PvpUser;
+import org.lushplugins.pvptoggle.PvPToggle;
+import org.lushplugins.pvptoggle.datamanager.PvPUser;
 import org.bukkit.Material;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
@@ -14,13 +14,13 @@ import org.bukkit.event.player.PlayerFishEvent;
 
 import java.util.Iterator;
 
-public class PvpEvents implements Listener {
+public class PvPEvents implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void onEntityDamageEvent(EntityDamageByEntityEvent event) {
-        if (!PvpTogglePlugin.getConfigManager().isPluginEnabledAt(event.getEntity().getWorld(), event.getEntity().getLocation())) return;
+        if (!PvPToggle.getConfigManager().isPluginEnabledAt(event.getEntity().getWorld(), event.getEntity().getLocation())) return;
         if (!(event.getEntity() instanceof Player attacked)) return;
-        PvpUser pvpUser = PvpTogglePlugin.getDataManager().getPvpUser(attacked);
+        PvPUser pvpUser = PvPToggle.getDataManager().getPvpUser(attacked);
         if (pvpUser == null) return;
         boolean attackedHasPVPEnabled = pvpUser.isPvpEnabled();
 
@@ -42,70 +42,70 @@ public class PvpEvents implements Listener {
 
         if (damager == null || damager == attacked) return;
 
-        boolean damagerHasPVPEnabled = PvpTogglePlugin.getDataManager().getPvpUser(damager).isPvpEnabled();
+        boolean damagerHasPVPEnabled = PvPToggle.getDataManager().getPvpUser(damager).isPvpEnabled();
         if (!damagerHasPVPEnabled) {
             event.setCancelled(true);
-            PvpTogglePlugin.getConfigManager().sendLangMessage(damager, "PVP_DISABLED");
+            PvPToggle.getConfigManager().sendLangMessage(damager, "PVP_DISABLED");
         } else if (!attackedHasPVPEnabled) {
             event.setCancelled(true);
-            PvpTogglePlugin.getConfigManager().sendLangMessage(damager, "PVP_DISABLED_OTHERS", attacked.getName());
+            PvPToggle.getConfigManager().sendLangMessage(damager, "PVP_DISABLED_OTHERS", attacked.getName());
         } else {
-            PvpTogglePlugin.getCooldownManager().setCooldown(damager, "PVP");
-            PvpTogglePlugin.getCooldownManager().setCooldown(attacked, "PVP");
+            PvPToggle.getCooldownManager().setCooldown(damager, "PVP");
+            PvPToggle.getCooldownManager().setCooldown(attacked, "PVP");
         }
     }
 
     @EventHandler(ignoreCancelled = true)
     public void onFlameArrow(EntityCombustByEntityEvent event) {
-        if (!PvpTogglePlugin.getConfigManager().isPluginEnabledAt(event.getEntity().getWorld(), event.getEntity().getLocation())) return;
+        if (!PvPToggle.getConfigManager().isPluginEnabledAt(event.getEntity().getWorld(), event.getEntity().getLocation())) return;
         if (!(event.getCombuster() instanceof Arrow arrow)) return;
         if (!(arrow.getShooter() instanceof Player damager) || !(event.getEntity() instanceof Player attacked)) return;
-        boolean damagerHasPVPEnabled = PvpTogglePlugin.getDataManager().getPvpUser(damager).isPvpEnabled();
-        boolean attackedHasPVPEnabled = PvpTogglePlugin.getDataManager().getPvpUser(attacked).isPvpEnabled();
+        boolean damagerHasPVPEnabled = PvPToggle.getDataManager().getPvpUser(damager).isPvpEnabled();
+        boolean attackedHasPVPEnabled = PvPToggle.getDataManager().getPvpUser(attacked).isPvpEnabled();
         if (!damagerHasPVPEnabled) {
             event.setCancelled(true);
-            PvpTogglePlugin.getConfigManager().sendLangMessage(damager, "PVP_DISABLED");
+            PvPToggle.getConfigManager().sendLangMessage(damager, "PVP_DISABLED");
         } else if (!attackedHasPVPEnabled) {
             event.setCancelled(true);
-            PvpTogglePlugin.getConfigManager().sendLangMessage(damager, "PVP_DISABLED_OTHERS", attacked.getName());
+            PvPToggle.getConfigManager().sendLangMessage(damager, "PVP_DISABLED_OTHERS", attacked.getName());
         } else {
-            PvpTogglePlugin.getCooldownManager().setCooldown(damager, "PVP");
-            PvpTogglePlugin.getCooldownManager().setCooldown(attacked, "PVP");
+            PvPToggle.getCooldownManager().setCooldown(damager, "PVP");
+            PvPToggle.getCooldownManager().setCooldown(attacked, "PVP");
         }
     }
 
     @EventHandler(ignoreCancelled = true)
     public void onPotionSplash(PotionSplashEvent event) {
-        if (!PvpTogglePlugin.getConfigManager().isPluginEnabledAt(event.getEntity().getWorld(), event.getEntity().getLocation())) return;
+        if (!PvPToggle.getConfigManager().isPluginEnabledAt(event.getEntity().getWorld(), event.getEntity().getLocation())) return;
         if (!(event.getPotion().getShooter() instanceof Player damager)) return;
-        boolean damagerHasPVPEnabled = PvpTogglePlugin.getDataManager().getPvpUser(damager).isPvpEnabled();
+        boolean damagerHasPVPEnabled = PvPToggle.getDataManager().getPvpUser(damager).isPvpEnabled();
         if (!damagerHasPVPEnabled) {
             for (LivingEntity entity : event.getAffectedEntities()) {
                 if (!(entity instanceof Player effected) || damager == effected) continue;
                 event.setIntensity(effected, 0.0D);
             }
-            PvpTogglePlugin.getConfigManager().sendLangMessage(damager, "PVP_DISABLED");
+            PvPToggle.getConfigManager().sendLangMessage(damager, "PVP_DISABLED");
             return;
         }
 
         for (LivingEntity entity : event.getAffectedEntities()) {
             if (!(entity instanceof Player attacked) || damager == attacked) continue;
-            boolean attackedHasPVPEnabled = PvpTogglePlugin.getDataManager().getPvpUser(attacked).isPvpEnabled();
+            boolean attackedHasPVPEnabled = PvPToggle.getDataManager().getPvpUser(attacked).isPvpEnabled();
             if (!attackedHasPVPEnabled) {
                 event.setIntensity(attacked, 0.0D);
-                PvpTogglePlugin.getConfigManager().sendLangMessage(damager, "PVP_DISABLED_OTHERS", attacked.getName());
+                PvPToggle.getConfigManager().sendLangMessage(damager, "PVP_DISABLED_OTHERS", attacked.getName());
                 continue;
             }
-            PvpTogglePlugin.getCooldownManager().setCooldown(damager, "PVP");
-            PvpTogglePlugin.getCooldownManager().setCooldown(attacked, "PVP");
+            PvPToggle.getCooldownManager().setCooldown(damager, "PVP");
+            PvPToggle.getCooldownManager().setCooldown(attacked, "PVP");
         }
     }
 
     @EventHandler(ignoreCancelled = true)
     public void onCloudEffects(AreaEffectCloudApplyEvent event) {
-        if (!PvpTogglePlugin.getConfigManager().isPluginEnabledAt(event.getEntity().getWorld(), event.getEntity().getLocation())) return;
+        if (!PvPToggle.getConfigManager().isPluginEnabledAt(event.getEntity().getWorld(), event.getEntity().getLocation())) return;
         if (!(event.getEntity().getSource() instanceof Player damager)) return;
-        boolean damagerHasPVPEnabled = PvpTogglePlugin.getDataManager().getPvpUser(damager).isPvpEnabled();
+        boolean damagerHasPVPEnabled = PvPToggle.getDataManager().getPvpUser(damager).isPvpEnabled();
         if (!damagerHasPVPEnabled) {
             for (Iterator<LivingEntity> it = event.getAffectedEntities().iterator(); it.hasNext();) {
                 LivingEntity entity = it.next();
@@ -118,13 +118,13 @@ public class PvpEvents implements Listener {
         for (Iterator<LivingEntity> it = event.getAffectedEntities().iterator(); it.hasNext();) {
             LivingEntity entity = it.next();
             if (!(entity instanceof Player affected) || damager == affected) continue;
-            boolean affectedHasPVPEnabled = PvpTogglePlugin.getDataManager().getPvpUser(affected).isPvpEnabled();
+            boolean affectedHasPVPEnabled = PvPToggle.getDataManager().getPvpUser(affected).isPvpEnabled();
             if (!affectedHasPVPEnabled) {
                 it.remove();
                 continue;
             }
-            PvpTogglePlugin.getCooldownManager().setCooldown(damager, "PVP");
-            PvpTogglePlugin.getCooldownManager().setCooldown(affected, "PVP");
+            PvPToggle.getCooldownManager().setCooldown(damager, "PVP");
+            PvPToggle.getCooldownManager().setCooldown(affected, "PVP");
         }
     }
 
@@ -132,21 +132,21 @@ public class PvpEvents implements Listener {
     public void onPlayerFishing(PlayerFishEvent event) {
         Entity caught = event.getCaught();
         if (caught == null) return;
-        if (!PvpTogglePlugin.getConfigManager().isPluginEnabledAt(caught.getWorld(), caught.getLocation())) return;
+        if (!PvPToggle.getConfigManager().isPluginEnabledAt(caught.getWorld(), caught.getLocation())) return;
         Player damager = event.getPlayer();
         if (!(caught instanceof Player attacked)) return;
         if (damager.getInventory().getItemInMainHand().getType() != Material.FISHING_ROD && damager.getInventory().getItemInOffHand().getType() != Material.FISHING_ROD) return;
-        boolean damagerHasPVPEnabled = PvpTogglePlugin.getDataManager().getPvpUser(damager).isPvpEnabled();
-        boolean attackedHasPVPEnabled = PvpTogglePlugin.getDataManager().getPvpUser(attacked).isPvpEnabled();
+        boolean damagerHasPVPEnabled = PvPToggle.getDataManager().getPvpUser(damager).isPvpEnabled();
+        boolean attackedHasPVPEnabled = PvPToggle.getDataManager().getPvpUser(attacked).isPvpEnabled();
         if (!damagerHasPVPEnabled) {
             event.setCancelled(true);
-            PvpTogglePlugin.getConfigManager().sendLangMessage(damager, "PVP_DISABLED");
+            PvPToggle.getConfigManager().sendLangMessage(damager, "PVP_DISABLED");
         } else if (!attackedHasPVPEnabled) {
             event.setCancelled(true);
-            PvpTogglePlugin.getConfigManager().sendLangMessage(damager, "PVP_DISABLED_OTHERS", attacked.getName());
+            PvPToggle.getConfigManager().sendLangMessage(damager, "PVP_DISABLED_OTHERS", attacked.getName());
         } else {
-            PvpTogglePlugin.getCooldownManager().setCooldown(damager, "PVP");
-            PvpTogglePlugin.getCooldownManager().setCooldown(attacked, "PVP");
+            PvPToggle.getCooldownManager().setCooldown(damager, "PVP");
+            PvPToggle.getCooldownManager().setCooldown(attacked, "PVP");
         }
     }
 

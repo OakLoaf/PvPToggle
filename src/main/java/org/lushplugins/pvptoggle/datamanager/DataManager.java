@@ -1,6 +1,6 @@
 package org.lushplugins.pvptoggle.datamanager;
 
-import org.lushplugins.pvptoggle.PvpTogglePlugin;
+import org.lushplugins.pvptoggle.PvPToggle;
 import org.bukkit.entity.Player;
 import org.enchantedskies.EnchantedStorage.IOHandler;
 import org.jetbrains.annotations.NotNull;
@@ -11,27 +11,27 @@ import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
 public class DataManager {
-    private final IOHandler<PvpUser> ioHandler = new IOHandler<>(new YmlStorage());
-    private final HashMap<UUID, PvpUser> uuidToPvpUser = new HashMap<>();
+    private final IOHandler<PvPUser> ioHandler = new IOHandler<>(new YmlStorage());
+    private final HashMap<UUID, PvPUser> uuidToPvpUser = new HashMap<>();
     private final HashSet<UUID> pvpEnabledPlayers = new HashSet<>();
 
-    public PvpUser getPvpUser(@NotNull Player player) {
+    public PvPUser getPvpUser(@NotNull Player player) {
         UUID uuid = player.getUniqueId();
 
-        PvpUser pvpUser = uuidToPvpUser.get(uuid);
+        PvPUser pvpUser = uuidToPvpUser.get(uuid);
         if (pvpUser == null) {
-            pvpUser = new PvpUser(uuid, player.getName(), PvpTogglePlugin.getConfigManager().getDefaultPvpMode());
+            pvpUser = new PvPUser(uuid, player.getName(), PvPToggle.getConfigManager().getDefaultPvpMode());
             uuidToPvpUser.put(uuid, pvpUser);
         }
         return pvpUser;
     }
 
-    public CompletableFuture<PvpUser> loadPvpUser(UUID uuid) {
-        return ioHandler.loadPlayer(uuid).thenApply(pvpUser -> {
-            if (!PvpTogglePlugin.getConfigManager().isPvpStateRemembered()) pvpUser.setPvpEnabled(PvpTogglePlugin.getConfigManager().getDefaultPvpMode());
-            uuidToPvpUser.put(uuid, pvpUser);
-            if (pvpUser.isPvpEnabled()) addPvpEnabledPlayer(uuid);
-            return pvpUser;
+    public CompletableFuture<PvPUser> loadPvpUser(UUID uuid) {
+        return ioHandler.loadPlayer(uuid).thenApply(pvPUser -> {
+            if (!PvPToggle.getConfigManager().isPvpStateRemembered()) pvPUser.setPvpEnabled(PvPToggle.getConfigManager().getDefaultPvpMode());
+            uuidToPvpUser.put(uuid, pvPUser);
+            if (pvPUser.isPvpEnabled()) addPvpEnabledPlayer(uuid);
+            return pvPUser;
         });
     }
 
@@ -40,7 +40,7 @@ public class DataManager {
         removePvpEnabledPlayer(uuid);
     }
 
-    public void savePvpUser(PvpUser user) {
+    public void savePvpUser(PvPUser user) {
         ioHandler.savePlayer(user);
     }
 
@@ -56,7 +56,7 @@ public class DataManager {
         pvpEnabledPlayers.remove(uuid);
     }
 
-    public IOHandler<PvpUser> getIoHandler() {
+    public IOHandler<PvPUser> getIoHandler() {
         return ioHandler;
     }
 }

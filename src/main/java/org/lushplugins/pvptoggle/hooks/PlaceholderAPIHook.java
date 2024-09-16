@@ -1,7 +1,7 @@
 package org.lushplugins.pvptoggle.hooks;
 
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
-import org.lushplugins.pvptoggle.PvpTogglePlugin;
+import org.lushplugins.pvptoggle.PvPToggle;
 import org.bukkit.entity.Player;
 
 public class PlaceholderAPIHook extends Hook {
@@ -22,7 +22,7 @@ public class PlaceholderAPIHook extends Hook {
 
         public String onPlaceholderRequest(Player player, String params) {
             if (player == null) return "null";
-            if (params.equals("pvp_state")) return PvpTogglePlugin.getDataManager().getPvpUser(player).isPvpEnabled() ? PvpTogglePlugin.getConfigManager().getPvpEnabledPlaceholder() : PvpTogglePlugin.getConfigManager().getPvpDisabledPlaceholder();
+            if (params.equals("pvp_state")) return PvPToggle.getDataManager().getPvpUser(player).isPvpEnabled() ? PvPToggle.getConfigManager().getPvpEnabledPlaceholder() : PvPToggle.getConfigManager().getPvpDisabledPlaceholder();
             return "null";
         }
 
@@ -39,11 +39,11 @@ public class PlaceholderAPIHook extends Hook {
         }
 
         public String getAuthor() {
-            return PvpTogglePlugin.getInstance().getDescription().getAuthors().toString();
+            return PvPToggle.getInstance().getDescription().getAuthors().toString();
         }
 
         public String getVersion() {
-            return PvpTogglePlugin.getInstance().getDescription().getVersion();
+            return PvPToggle.getInstance().getDescription().getVersion();
         }
     }
 }

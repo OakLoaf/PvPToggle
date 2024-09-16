@@ -1,7 +1,7 @@
 package org.lushplugins.pvptoggle.config;
 
 import me.dave.chatcolorhandler.ChatColorHandler;
-import org.lushplugins.pvptoggle.PvpTogglePlugin;
+import org.lushplugins.pvptoggle.PvPToggle;
 import org.lushplugins.pvptoggle.hooks.WorldGuardHook;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ConfigManager {
-    private final PvpTogglePlugin plugin = PvpTogglePlugin.getInstance();
+    private final PvPToggle plugin = PvPToggle.getInstance();
     private FileConfiguration config;
     private final List<String> defaultWorldList = new ArrayList<>();
 
@@ -60,7 +60,7 @@ public class ConfigManager {
     public boolean isPluginEnabledAt(World world, Location location) {
         if (!isWorldEnabled(world.getName())) return false;
 
-        if (PvpTogglePlugin.getHook("WorldGuard") instanceof WorldGuardHook wgHook) {
+        if (PvPToggle.getHook("WorldGuard") instanceof WorldGuardHook wgHook) {
             return wgHook.isRegionEnabled(world, location);
         }
 

@@ -1,6 +1,6 @@
 package org.lushplugins.pvptoggle.datamanager;
 
-import org.lushplugins.pvptoggle.PvpTogglePlugin;
+import org.lushplugins.pvptoggle.PvPToggle;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -11,8 +11,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.UUID;
 
-public class YmlStorage implements Storage<PvpUser> {
-    private final PvpTogglePlugin plugin = PvpTogglePlugin.getInstance();
+public class YmlStorage implements Storage<PvPUser> {
+    private final PvPToggle plugin = PvPToggle.getInstance();
     private final File dataFolder = new File(plugin.getDataFolder(), "data");
 
     public YmlStorage() {
@@ -21,15 +21,15 @@ public class YmlStorage implements Storage<PvpUser> {
     }
 
     @Override
-    public PvpUser load(UUID uuid) {
+    public PvPUser load(UUID uuid) {
         ConfigurationSection configurationSection = loadOrCreateFile(uuid);
         String name = configurationSection.getString("name");
         boolean pvpEnabled = configurationSection.getBoolean("pvp-enabled");
-        return new PvpUser(uuid, name, pvpEnabled);
+        return new PvPUser(uuid, name, pvpEnabled);
     }
 
     @Override
-    public void save(PvpUser pvpUser) {
+    public void save(PvPUser pvpUser) {
         YamlConfiguration yamlConfiguration = loadOrCreateFile(pvpUser.getUUID());
 
         String username = pvpUser.getUsername();
@@ -54,7 +54,7 @@ public class YmlStorage implements Storage<PvpUser> {
             if (player != null) username = player.getName();
             else username = "Error: Could not get username, will load when the player next joins";
             yamlConfiguration.set("name", username);
-            yamlConfiguration.set("pvp-enabled", PvpTogglePlugin.getConfigManager().getDefaultPvpMode());
+            yamlConfiguration.set("pvp-enabled", PvPToggle.getConfigManager().getDefaultPvpMode());
             try {
                 yamlConfiguration.save(file);
             } catch (IOException err) {
@@ -72,7 +72,7 @@ public class YmlStorage implements Storage<PvpUser> {
         YamlConfiguration config = YamlConfiguration.loadConfiguration(file);
         for (String uuidStr : config.getKeys(false)) {
             UUID uuid = UUID.fromString(uuidStr);
-            PvpUser pvpUser = new PvpUser(uuid, Bukkit.getOfflinePlayer(uuid).getName(), config.getBoolean(uuidStr + "pvp-enabled"));
+            PvPUser pvpUser = new PvPUser(uuid, Bukkit.getOfflinePlayer(uuid).getName(), config.getBoolean(uuidStr + "pvp-enabled"));
             save(pvpUser);
         }
 

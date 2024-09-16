@@ -1,6 +1,6 @@
-name: PVPToggle
+name: PvPToggle
 version: ${project.version}
-main: org.lushplugins.pvptoggle.PvpTogglePlugin
+main: org.lushplugins.pvptoggle.PvPToggle
 api-version: 1.16
 softdepend:
   - PlaceholderAPI

@@ -1,2 +1,2 @@
-rootProject.name = "PVPToggle"
+rootProject.name = "PvPToggle"
 

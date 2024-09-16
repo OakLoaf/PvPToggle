@@ -1,6 +1,6 @@
 package org.lushplugins.pvptoggle.datamanager;
 
-import org.lushplugins.pvptoggle.PvpTogglePlugin;
+import org.lushplugins.pvptoggle.PvPToggle;
 import org.bukkit.entity.Player;
 
 import java.time.LocalDateTime;
@@ -56,16 +56,16 @@ public class CooldownManager {
 
         switch (cooldownType.toUpperCase()) {
             case "COMMAND" -> {
-                if (seconds >= PvpTogglePlugin.getConfigManager().getCommandCooldown()) {
+                if (seconds >= PvPToggle.getConfigManager().getCommandCooldown()) {
                     removeCooldown(player, cooldownType);
                     return -1;
-                } else return PvpTogglePlugin.getConfigManager().getCommandCooldown() - seconds;
+                } else return PvPToggle.getConfigManager().getCommandCooldown() - seconds;
             }
             case "PVP" -> {
-                if (seconds >= PvpTogglePlugin.getConfigManager().getPvpCooldown()) {
+                if (seconds >= PvPToggle.getConfigManager().getPvpCooldown()) {
                     removeCooldown(player, cooldownType);
                     return -1;
-                } else return PvpTogglePlugin.getConfigManager().getPvpCooldown() - seconds;
+                } else return PvPToggle.getConfigManager().getPvpCooldown() - seconds;
             }
         }
         return seconds;
