@@ -5,11 +5,11 @@ import org.lushplugins.pvptoggle.PvPToggle;
 import org.bukkit.entity.Player;
 
 public class PlaceholderAPIHook extends Hook {
-    private PvpToggleExpansion pvpToggleExpansion;
+    private PvPToggleExpansion pvpToggleExpansion;
 
     @Override
     public void onEnable() {
-        pvpToggleExpansion = new PvpToggleExpansion();
+        pvpToggleExpansion = new PvPToggleExpansion();
         pvpToggleExpansion.register();
     }
 
@@ -18,11 +18,11 @@ public class PlaceholderAPIHook extends Hook {
         if (pvpToggleExpansion != null) pvpToggleExpansion.unregister();
     }
 
-    public static class PvpToggleExpansion extends PlaceholderExpansion {
+    public static class PvPToggleExpansion extends PlaceholderExpansion {
 
         public String onPlaceholderRequest(Player player, String params) {
             if (player == null) return "null";
-            if (params.equals("pvp_state")) return PvPToggle.getDataManager().getPvpUser(player).isPvpEnabled() ? PvPToggle.getConfigManager().getPvpEnabledPlaceholder() : PvPToggle.getConfigManager().getPvpDisabledPlaceholder();
+            if (params.equals("pvp_state")) return PvPToggle.getDataManager().getPvPUser(player).isPvPEnabled() ? PvPToggle.getConfigManager().getPvPEnabledPlaceholder() : PvPToggle.getConfigManager().getPvPDisabledPlaceholder();
             return "null";
         }
 

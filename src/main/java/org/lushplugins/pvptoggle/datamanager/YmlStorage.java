@@ -35,7 +35,7 @@ public class YmlStorage implements Storage<PvPUser> {
         String username = pvpUser.getUsername();
         if (username == null) username = "Error: Could not get username, will load when the player next joins";
         yamlConfiguration.set("name", username);
-        yamlConfiguration.set("pvp-enabled", pvpUser.isPvpEnabled());
+        yamlConfiguration.set("pvp-enabled", pvpUser.isPvPEnabled());
         File file = new File(dataFolder, pvpUser.getUUID().toString() + ".yml");
         try {
             yamlConfiguration.save(file);
@@ -54,7 +54,7 @@ public class YmlStorage implements Storage<PvPUser> {
             if (player != null) username = player.getName();
             else username = "Error: Could not get username, will load when the player next joins";
             yamlConfiguration.set("name", username);
-            yamlConfiguration.set("pvp-enabled", PvPToggle.getConfigManager().getDefaultPvpMode());
+            yamlConfiguration.set("pvp-enabled", PvPToggle.getConfigManager().getDefaultPvPState());
             try {
                 yamlConfiguration.save(file);
             } catch (IOException err) {

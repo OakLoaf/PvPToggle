@@ -1,51 +1,51 @@
-# Do you want the plugin to remember a player's last PVP state when the login
+# Do you want the plugin to remember a player's last PvP state when the login
 remember-pvp-state: true
-# (Opped users will bypass cooldowns, set the player's "pvptoggle.bypasscooldown" permission to 'false'  to remove bypass)
+# (Opped users will bypass cooldowns, set the player's "pvptoggle.bypasscooldown" permission to "false"  to remove bypass)
 # The amount of seconds between toggling pvp
 command-cooldown: 0
 # The amount of seconds between pvp and being able to toggle pvp
 pvp-cooldown: 0
 # The amount of seconds after running the command it takes for pvp to be toggled (if you are hit within this time and pvp is enabled the command will be cancelled)
 command-wait: 0
-# Whether or not pvp is enabled for players by default; true - enabled, false - disabled
+# Whether pvp is enabled for players by default; true - enabled, false - disabled
 default-pvp: true
 # The way in which to display particles; Disabled: -1, Display to all: 0, display to only pvp enabled players: 1
 particles: -1
-# Worlds which will be unaffected by PVP Toggle
+# Worlds which will be unaffected by PvPToggle
 ignored-worlds:
   - world_1
   - world_2
 
 # PlaceholderAPI placeholders
 placeholder-api:
-  pvp-enabled: "&aPVP On"
-  pvp-disabled: "&cPVP Off"
+  pvp-enabled: "&#b7faa2PvP On"
+  pvp-disabled: "&#ff6969PvP Off"
 
-# <pvpstate> goes in place of a player's current pvp state
-# <parameter> goes in place of a player's name or other parameter
+# <pvpstate> goes in place of a player"s current pvp state
+# <parameter> goes in place of a player"s name or other parameter
 messages:
-  PREFIX: '&c&lPVP Toggle: '
-  HELP_HEADER: '&a&lCommands:'
-  HELP_GENERAL_USEAGE: '&aUse /pvp {toggle|on|off|status} to change/view pvp state.'
-  HELP_VIEW_OTHERS: '&aUse /pvp status <player> to see another players pvp state.'
-  HELP_SET_OTHERS: '&aUse /pvp {toggle|on|off} <player> to set another players pvp state.'
-  RELOAD_SUCCESS: '&aReload complete.'
-  UNKNOWN_PLAYER: '&cCould not find a player by the name <parameter>'
-  COMMAND_INVALID: '&cInvalid command type /pvp help for a list of commands'
-  COMMAND_TIMER: '&cPVP State changing in <parameter> seconds.'
-  COMMAND_RUNNING: '&cThis command is already running'
-  NO_PERMISSION: '&cYou do not have sufficient permissions to do this.'
-  PVP_STATE_ENABLED: '&aYour pvp has been enabled!'
-  PVP_STATE_DISABLED: '&cYour pvp has been disabled!'
-  PVP_STATE_CHANGED_OTHERS: '&a<parameter> had their pvp state changed to <pvpstate>'
-  PVP_STATUS: '&aYour pvp is turned <pvpstate>'
-  PVP_STATUS_OTHERS: '&a<parameter> has their pvp <pvpstate>'
-  PVP_DISABLED: '&cYou have pvp disabled!'
-  PVP_DISABLED_OTHERS: '&c<parameter> has pvp disabled!'
-  PVP_COOLDOWN: '&cToo fast! You can toggle pvp in <parameter> seconds.'
-  PVP_WORLD_CHANGE_DISABLED: '&aYour pvp has been disabled because the world you entered does not allow pvp.'
-  PVP_WORLD_CHANGE_REQUIRED: '&aYour pvp has been enabled because the world you entered requires pvp.'
-  PVP_WORLD_CANNOT_CHANGE_SELF: '&cYou cannot change pvp state in this world.'
-  PVP_WORLD_CANNOT_CHANGE_OTHERS: '&cYou cannot change pvp state in that world.'
-  PVP_REGION_ENABLED: '&aThe region you have entered means that your pvp state is no longer ignored!'
-  PVP_REGION_DISABLED: '&aThe region you have entered ignores your pvp state - be careful!'
+  prefix: "&#ff6969&lPvPToggle: "
+  reload: "&#b7faa2PvPToggle has been reloaded &#66b04f🔃"
+  help-header: "&#b7faa2&lCommands:"
+  help-general-usage: "&#b7faa2Use /pvp {toggle|on|off|status} to change/view pvp state."
+  help-view-other: "&#b7faa2Use /pvp status <player> to see another player's pvp state."
+  help-set-other: "&#b7faa2Use /pvp {toggle|on|off} <player> to set another player's pvp state."
+  pvp-state-enabled: "&#b7faa2Your pvp has been enabled!"
+  pvp-state-disabled: "&#ff6969Your pvp has been disabled!"
+  pvp-state-changed-other: "&#b7faa2%player% had their pvp state changed to %pvp-state%"
+  pvp-status: "&#b7faa2Your pvp is turned %pvp-state%"
+  pvp-status-other: "&#66b04f%player% &#b7faa2has their pvp &#66b04f%pvp-state%"
+  pvp-disabled: "&#ff6969You have pvp disabled!"
+  pvp-disabled-other: "&#ff6969%player% has pvp disabled!"
+  pvp-cooldown: "&#ff6969Too fast! You can toggle pvp in &#d13636%seconds% seconds&#ff6969."
+  pvp-world-change-disabled: "&#b7faa2Your pvp has been disabled because the world you entered does not allow pvp."
+  pvp-world-change-required: "&#b7faa2Your pvp has been enabled because the world you entered requires pvp."
+  pvp-world-cannot-change-self: "&#ff6969You cannot change pvp state in this world."
+  pvp-world-cannot-change-other: "&#ff6969You cannot change pvp state in that world."
+  pvp-region-enabled: "&#b7faa2The region you have entered means that your pvp state is no longer ignored!"
+  pvp-region-disabled: "&#b7faa2The region you have entered ignores your pvp state - be careful!"
+  command-timer: "&#ff6969PvP state changing in %seconds% seconds."
+  command-running: "&#ff6969This command is already running"
+  no-permissions: "&#ff6969Insufficient permissions"
+  incorrect-usage: "&#ff6969Incorrect usage try &#d13636%command-usage%"
+  unknown-player: "&#ff6969Could not find a player with the name %player-name%"

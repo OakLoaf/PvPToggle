@@ -10,5 +10,5 @@ commands:
     usage: /pvp
 permissions:
   pvptoggle.use:
-    description: Allows Toggling PVP
+    description: Allows Toggling PvP
     default: true

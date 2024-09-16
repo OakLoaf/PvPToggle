@@ -26,6 +26,8 @@ public final class PvPToggle extends JavaPlugin {
 //        plugin = this;
         cooldownManager = new CooldownManager();
         configManager = new ConfigManager();
+        configManager.reloadConfig();
+
         dataManager = new DataManager();
 
         Listener[] listeners = new Listener[] {

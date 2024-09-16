@@ -1,6 +1,7 @@
 package org.lushplugins.pvptoggle.config;
 
 import me.dave.chatcolorhandler.ChatColorHandler;
+import org.bukkit.configuration.ConfigurationSection;
 import org.lushplugins.pvptoggle.PvPToggle;
 import org.lushplugins.pvptoggle.hooks.WorldGuardHook;
 import org.bukkit.Location;
@@ -10,116 +11,135 @@ import org.bukkit.configuration.file.FileConfiguration;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.regex.Pattern;
 
 public class ConfigManager {
-    private final PvPToggle plugin = PvPToggle.getInstance();
-    private FileConfiguration config;
-    private final List<String> defaultWorldList = new ArrayList<>();
+    private static final Pattern OUTDATED_MESSAGE_NAME = Pattern.compile("[A-Z_]");
+
+    private boolean rememberPvPState;
+    private long commandCooldown;
+    private long pvpCooldown;
+    private int commandWaitTime;
+    private boolean defaultPvPState;
+    private int particlesDisplayMode;
+    private List<String> ignoredWorlds = new ArrayList<>();
+    private String placeholderPvPEnabled;
+    private String placeholderPvPDisabled;
+    private final ConcurrentHashMap<String, String> messages = new ConcurrentHashMap<>();
 
     public ConfigManager() {
-        plugin.saveDefaultConfig();
-        reloadConfig();
+        PvPToggle.getInstance().saveDefaultConfig();
     }
 
     public void reloadConfig() {
+        PvPToggle plugin = PvPToggle.getInstance();
         plugin.reloadConfig();
-        config = plugin.getConfig();
-        reloadWorldList();
+        FileConfiguration config = plugin.getConfig();
+
+        rememberPvPState = config.getBoolean("remember-pvp-state", true);
+        commandCooldown = config.getLong("command-cooldown", 0);
+        pvpCooldown = config.getLong("pvp-cooldown", 0);
+        commandWaitTime = config.getInt("command-wait", 0);
+        defaultPvPState = config.getBoolean("default-pvp", true);
+        particlesDisplayMode = config.getInt("particles", -1);
+
+        ignoredWorlds = new ArrayList<>(config.getStringList("ignored-worlds"));
+        if (config.contains("worlds")) {
+            ignoredWorlds.addAll(config.getStringList("worlds"));
+            plugin.getLogger().warning("Deprecated: The 'worlds' config option has been renamed to 'ignored-worlds' and is scheduled for removal");
+        }
+
+        placeholderPvPEnabled = config.getString("placeholder-api.pvp-enabled");
+        placeholderPvPDisabled = config.getString("placeholder-api.pvp-disabled");
+
+        messages.clear();
+        ConfigurationSection messagesSection = config.getConfigurationSection("messages");
+        if (messagesSection != null) {
+            messagesSection.getValues(false).forEach((key, value) -> {
+                if (OUTDATED_MESSAGE_NAME.matcher(key).find()) {
+                    plugin.getLogger().warning("Deprecated: The message '" + key + "' contains uppercase or underscore characters which are no longer used in message names and are scheduled for removal. Please note that message names and placeholders were changed in version 2 and will need adjusting");
+                    key = key.toLowerCase()
+                        .replace("_", "-")
+                        .replace("others", "other");
+                }
+
+                messages.put(key, (String) value);
+            });
+        }
     }
 
-    private void reloadWorldList() {
-        defaultWorldList.clear();
-        defaultWorldList.addAll(config.getStringList("worlds"));
-    }
-
-    // Config sections
-    public boolean isPvpStateRemembered() {
-        return config.getBoolean("remember-pvp-state");
+    public boolean isPvPStateRemembered() {
+        return rememberPvPState;
     }
 
     public long getCommandCooldown() {
-        return config.getLong("command-cooldown");
+        return commandCooldown;
     }
 
-    public int getPvpCooldown() {
-        return config.getInt("pvp-cooldown");
+    public long getPvPCooldown() {
+        return pvpCooldown;
     }
 
     public int getCommandWaitTime() {
-        return config.getInt("command-wait");
+        return commandWaitTime;
     }
 
-    public boolean getDefaultPvpMode() {
-        return config.getBoolean("default-pvp");
+    public boolean getDefaultPvPState() {
+        return defaultPvPState;
     }
 
     public int getParticlesDisplayMode() {
-        return config.getInt("particles");
+        return particlesDisplayMode;
     }
 
-    public boolean isPluginEnabledAt(World world, Location location) {
-        if (!isWorldEnabled(world.getName())) return false;
+    public boolean isLocationIgnored(World world, Location location) {
+        if (isWorldIgnored(world.getName())) {
+            return true;
+        }
 
         if (PvPToggle.getHook("WorldGuard") instanceof WorldGuardHook wgHook) {
-            return wgHook.isRegionEnabled(world, location);
+            return !wgHook.isRegionEnabled(world, location);
         }
 
         return false;
     }
 
-    public boolean isWorldEnabled(String worldName) {
-        return !defaultWorldList.contains(worldName);
+    public boolean isWorldIgnored(String worldName) {
+        return ignoredWorlds.contains(worldName);
     }
 
-
-    public String getPvpEnabledPlaceholder() {
-        return config.getString("placeholder-api.pvp-enabled");
+    public String getPvPEnabledPlaceholder() {
+        return placeholderPvPEnabled;
     }
 
-    public String getPvpDisabledPlaceholder() {
-        return config.getString("placeholder-api.pvp-disabled");
+    public String getPvPDisabledPlaceholder() {
+        return placeholderPvPDisabled;
     }
 
-    public String getLangMessage(String messageName, String parameter, boolean pvpState) {
-        String message = config.getString("messages." + messageName.toUpperCase());
-        if (message == null || message.isBlank()) return null;
-        if (parameter != null) message = message.replaceAll("<parameter>", parameter);
-        if (pvpState) message = message.replaceAll("<pvpstate>", "on");
-        else message = message.replaceAll("<pvpstate>", "off");
-        message = config.getString("messages.PREFIX") + message;
+    public String getMessage(String messageName) {
+        return getMessage(messageName, true);
+    }
+
+    public String getMessage(String messageName, boolean showPrefix) {
+        String message = messages.get(messageName);
+        if (message == null || message.isBlank()) {
+            return null;
+        }
+
+        if (showPrefix) {
+            message = messages.getOrDefault("prefix", "") + message;
+        }
+
         message = ChatColorHandler.translateAlternateColorCodes(message);
         return message;
     }
 
-    public void sendLangMessage(CommandSender sender, String messageName) {
-        ChatColorHandler.sendMessage(sender, getLangMessage(messageName, null, false));
+    public void sendMessage(CommandSender sender, String messageName) {
+        sendMessage(sender, messageName, true);
     }
 
-    public void sendLangMessage(CommandSender sender, String messageName, String parameter) {
-        ChatColorHandler.sendMessage(sender, getLangMessage(messageName, parameter, false));
+    public void sendMessage(CommandSender sender, String messageName, boolean showPrefix) {
+        ChatColorHandler.sendMessage(sender, getMessage(messageName, showPrefix));
     }
-
-    public void sendLangMessage(CommandSender sender, String messageName, boolean pvpState) {
-        ChatColorHandler.sendMessage(sender, getLangMessage(messageName, null, pvpState));
-    }
-
-    public void sendLangMessage(CommandSender sender, String messageName, String parameter, boolean pvpState) {
-        ChatColorHandler.sendMessage(sender, getLangMessage(messageName, parameter, pvpState));
-    }
-
-//    public void sendLangMessage(Player player, String messageName) {
-//        ChatColorHandler.sendMessage(player, getLangMessage(messageName, null, false));
-//    }
-//
-//    public void sendLangMessage(Player player, String messageName, String parameter) {
-//        ChatColorHandler.sendMessage(player, getLangMessage(messageName, parameter, false));
-//    }
-//
-//    public void sendLangMessage(Player player, String messageName, boolean pvpState) {
-//        ChatColorHandler.sendMessage(player, getLangMessage(messageName, null, pvpState));
-//    }
-//
-//    public void sendLangMessage(Player player, String messageName, String parameter, boolean pvpState) {
-//        ChatColorHandler.sendMessage(player, getLangMessage(messageName, parameter, pvpState));
-//    }
 }

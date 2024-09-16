@@ -12,47 +12,47 @@ import java.util.concurrent.CompletableFuture;
 
 public class DataManager {
     private final IOHandler<PvPUser> ioHandler = new IOHandler<>(new YmlStorage());
-    private final HashMap<UUID, PvPUser> uuidToPvpUser = new HashMap<>();
+    private final HashMap<UUID, PvPUser> uuidToPvPUser = new HashMap<>();
     private final HashSet<UUID> pvpEnabledPlayers = new HashSet<>();
 
-    public PvPUser getPvpUser(@NotNull Player player) {
+    public PvPUser getPvPUser(@NotNull Player player) {
         UUID uuid = player.getUniqueId();
 
-        PvPUser pvpUser = uuidToPvpUser.get(uuid);
+        PvPUser pvpUser = uuidToPvPUser.get(uuid);
         if (pvpUser == null) {
-            pvpUser = new PvPUser(uuid, player.getName(), PvPToggle.getConfigManager().getDefaultPvpMode());
-            uuidToPvpUser.put(uuid, pvpUser);
+            pvpUser = new PvPUser(uuid, player.getName(), PvPToggle.getConfigManager().getDefaultPvPState());
+            uuidToPvPUser.put(uuid, pvpUser);
         }
         return pvpUser;
     }
 
-    public CompletableFuture<PvPUser> loadPvpUser(UUID uuid) {
+    public CompletableFuture<PvPUser> loadPvPUser(UUID uuid) {
         return ioHandler.loadPlayer(uuid).thenApply(pvPUser -> {
-            if (!PvPToggle.getConfigManager().isPvpStateRemembered()) pvPUser.setPvpEnabled(PvPToggle.getConfigManager().getDefaultPvpMode());
-            uuidToPvpUser.put(uuid, pvPUser);
-            if (pvPUser.isPvpEnabled()) addPvpEnabledPlayer(uuid);
+            if (!PvPToggle.getConfigManager().isPvPStateRemembered()) pvPUser.setPvPEnabled(PvPToggle.getConfigManager().getDefaultPvPState());
+            uuidToPvPUser.put(uuid, pvPUser);
+            if (pvPUser.isPvPEnabled()) addPvPEnabledPlayer(uuid);
             return pvPUser;
         });
     }
 
-    public void unloadPvpUser(UUID uuid) {
-        uuidToPvpUser.remove(uuid);
-        removePvpEnabledPlayer(uuid);
+    public void unloadPvPUser(UUID uuid) {
+        uuidToPvPUser.remove(uuid);
+        removePvPEnabledPlayer(uuid);
     }
 
-    public void savePvpUser(PvPUser user) {
+    public void savePvPUser(PvPUser user) {
         ioHandler.savePlayer(user);
     }
 
-    public HashSet<UUID> getPvpEnabledPlayers() {
+    public HashSet<UUID> getPvPEnabledPlayers() {
         return pvpEnabledPlayers;
     }
 
-    public void addPvpEnabledPlayer(UUID uuid) {
+    public void addPvPEnabledPlayer(UUID uuid) {
         pvpEnabledPlayers.add(uuid);
     }
 
-    public void removePvpEnabledPlayer(UUID uuid) {
+    public void removePvPEnabledPlayer(UUID uuid) {
         pvpEnabledPlayers.remove(uuid);
     }
 

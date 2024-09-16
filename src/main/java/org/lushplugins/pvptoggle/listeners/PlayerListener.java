@@ -26,20 +26,20 @@ public class PlayerListener implements Listener {
         plugin = PvPToggle.getInstance();
 
         for (Player player : Bukkit.getOnlinePlayers()) {
-            PvPToggle.getDataManager().loadPvpUser(player.getUniqueId()).thenAccept((ignored) -> new BukkitRunnable() {
+            PvPToggle.getDataManager().loadPvPUser(player.getUniqueId()).thenAccept((ignored) -> new BukkitRunnable() {
                 @Override
                 public void run() {
-                    checkPvpWorld(player);
+                    checkPvPWorld(player);
                 }
             }.runTask(plugin));
         }
 
         Bukkit.getScheduler().runTaskTimer(PvPToggle.getInstance(), () -> {
-            HashSet<UUID> pvpEnabledPlayers = PvPToggle.getDataManager().getPvpEnabledPlayers();
+            HashSet<UUID> pvpEnabledPlayers = PvPToggle.getDataManager().getPvPEnabledPlayers();
             for (UUID playerUUID : pvpEnabledPlayers) {
                 Player player = Bukkit.getPlayer(playerUUID);
                 if (player != null) displayParticles(player);
-                else PvPToggle.getDataManager().removePvpEnabledPlayer(playerUUID);
+                else PvPToggle.getDataManager().removePvPEnabledPlayer(playerUUID);
             }
         }, 0, 4);
     }
@@ -48,11 +48,11 @@ public class PlayerListener implements Listener {
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
 
-        PvPToggle.getDataManager().loadPvpUser(player.getUniqueId()).thenAccept((pvpUser) -> new BukkitRunnable() {
+        PvPToggle.getDataManager().loadPvPUser(player.getUniqueId()).thenAccept((pvpUser) -> new BukkitRunnable() {
             @Override
             public void run() {
                 pvpUser.setUsername(player.getName());
-                checkPvpWorld(player);
+                checkPvPWorld(player);
             }
         }.runTask(plugin));
     }
@@ -60,37 +60,41 @@ public class PlayerListener implements Listener {
     @EventHandler
     public void onPlayerLeave(PlayerQuitEvent event) {
         UUID playerUUID = event.getPlayer().getUniqueId();
-        PvPToggle.getDataManager().unloadPvpUser(playerUUID);
+        PvPToggle.getDataManager().unloadPvPUser(playerUUID);
     }
 
     @EventHandler
     public void onChangeWorld(PlayerChangedWorldEvent event) {
         Player player = event.getPlayer();
-        checkPvpWorld(player);
+        checkPvPWorld(player);
     }
 
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent event) {
-        if (!PvPToggle.getConfigManager().isWorldEnabled(event.getPlayer().getWorld().getName())) return;
+        if (PvPToggle.getConfigManager().isWorldIgnored(event.getPlayer().getWorld().getName())) {
+            return;
+        }
+
         if (event.getTo() == null || event.getFrom().getBlock().equals(event.getTo().getBlock())) return;
 
         if (PvPToggle.getHook("WorldGuard") instanceof WorldGuardHook wgHook) {
             Player player = event.getPlayer();
             if (wgHook.isRegionEnabled(player.getWorld(), event.getFrom()) != wgHook.isRegionEnabled(player.getWorld(), event.getTo())) {
-                Bukkit.getScheduler().runTaskLater(plugin, () -> wgHook.checkPvpRegion(player), 1);
+                Bukkit.getScheduler().runTaskLater(plugin, () -> wgHook.checkPvPRegion(player), 1);
             }
         }
     }
 
-    private void checkPvpWorld(@NotNull Player player) {
+    private void checkPvPWorld(@NotNull Player player) {
         World world = player.getWorld();
-        boolean playerHasPvpEnabled = PvPToggle.getDataManager().getPvpUser(player).isPvpEnabled();
-        if (!world.getPVP() && !playerHasPvpEnabled) {
-            PvPToggle.getConfigManager().sendLangMessage(player, "PVP_WORLD_CHANGE_DISABLED");
+        boolean playerHasPvPEnabled = PvPToggle.getDataManager().getPvPUser(player).isPvPEnabled();
+        if (!world.getPVP() && !playerHasPvPEnabled) {
+            PvPToggle.getConfigManager().sendMessage(player, "pvp-world-change-disabled");
             return;
         }
-        if (!PvPToggle.getConfigManager().isWorldEnabled(world.getName()) && world.getPVP() && playerHasPvpEnabled) {
-            PvPToggle.getConfigManager().sendLangMessage(player, "PVP_WORLD_CHANGE_REQUIRED");
+
+        if (PvPToggle.getConfigManager().isWorldIgnored(world.getName()) && world.getPVP() && playerHasPvPEnabled) {
+            PvPToggle.getConfigManager().sendMessage(player, "pvp-world-change-required");
         }
     }
 
@@ -100,7 +104,7 @@ public class PlayerListener implements Listener {
             case 0 -> player.getWorld().spawnParticle(Particle.REDSTONE, player.getEyeLocation().add(0, 0.5, 0), 0, 0.0D, 1.0D, 0.0D, dustOptions);
             case 1 -> {
                 Location pLoc = player.getLocation();
-                HashSet<UUID> pvpEnabledPlayers = PvPToggle.getDataManager().getPvpEnabledPlayers();
+                HashSet<UUID> pvpEnabledPlayers = PvPToggle.getDataManager().getPvPEnabledPlayers();
                 List<Entity> nearbyEntities = player.getNearbyEntities(pLoc.getX(), pLoc.getY(), pLoc.getZ());
                 for (Entity entity : nearbyEntities) {
                     if (entity instanceof Player nearbyPlayer && pvpEnabledPlayers.contains(nearbyPlayer.getUniqueId())) {

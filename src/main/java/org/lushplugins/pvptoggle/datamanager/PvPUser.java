@@ -17,16 +17,16 @@ public class PvPUser {
 
     public void setUsername(String username) {
         this.username = username;
-        PvPToggle.getDataManager().savePvpUser(this);
+        PvPToggle.getDataManager().savePvPUser(this);
     }
 
-    public void setPvpEnabled(boolean pvpEnabled) {
+    public void setPvPEnabled(boolean pvpEnabled) {
         this.pvpEnabled = pvpEnabled;
 
-        if (pvpEnabled) PvPToggle.getDataManager().addPvpEnabledPlayer(uuid);
-        else PvPToggle.getDataManager().removePvpEnabledPlayer(uuid);
+        if (pvpEnabled) PvPToggle.getDataManager().addPvPEnabledPlayer(uuid);
+        else PvPToggle.getDataManager().removePvPEnabledPlayer(uuid);
 
-        PvPToggle.getDataManager().savePvpUser(this);
+        PvPToggle.getDataManager().savePvPUser(this);
     }
 
     public UUID getUUID() {
@@ -37,7 +37,7 @@ public class PvPUser {
         return this.username;
     }
 
-    public boolean isPvpEnabled() {
+    public boolean isPvPEnabled() {
         return this.pvpEnabled;
     }
 }

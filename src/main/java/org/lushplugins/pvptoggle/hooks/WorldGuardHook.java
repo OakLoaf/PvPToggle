@@ -41,15 +41,16 @@ public class WorldGuardHook extends Hook implements Listener {
     @Override
     public void onDisable() {}
 
-    public void checkPvpRegion(@NotNull Player player) {
+    public void checkPvPRegion(@NotNull Player player) {
         World world = player.getWorld();
-        if (PvPToggle.getConfigManager().isWorldEnabled(world.getName())) {
-            if (isRegionEnabled(player)) {
-                PvPToggle.getConfigManager().sendLangMessage(player, "PVP_REGION_ENABLED");
-            }
-            else {
-                PvPToggle.getConfigManager().sendLangMessage(player, "PVP_REGION_DISABLED");
-            }
+        if (PvPToggle.getConfigManager().isWorldIgnored(world.getName())) {
+            return;
+        }
+
+        if (isRegionEnabled(player)) {
+            PvPToggle.getConfigManager().sendMessage(player, "pvp-region-enabled");
+        } else {
+            PvPToggle.getConfigManager().sendMessage(player, "pvp-region-disabled");
         }
     }
 
