@@ -1,7 +1,7 @@
 package org.lushplugins.pvptoggle.config;
 
-import me.dave.chatcolorhandler.ChatColorHandler;
 import org.bukkit.configuration.ConfigurationSection;
+import org.lushplugins.lushlib.libraries.chatcolor.ChatColorHandler;
 import org.lushplugins.pvptoggle.PvPToggle;
 import org.lushplugins.pvptoggle.hooks.WorldGuardHook;
 import org.bukkit.Location;
@@ -98,8 +98,8 @@ public class ConfigManager {
             return true;
         }
 
-        if (PvPToggle.getHook("WorldGuard") instanceof WorldGuardHook wgHook) {
-            return !wgHook.isRegionEnabled(world, location);
+        if (PvPToggle.getInstance().getHook("WorldGuard").orElse(null) instanceof WorldGuardHook worldGuardHook) {
+            return !worldGuardHook.isRegionEnabled(world, location);
         }
 
         return false;
@@ -131,8 +131,7 @@ public class ConfigManager {
             message = messages.getOrDefault("prefix", "") + message;
         }
 
-        message = ChatColorHandler.translateAlternateColorCodes(message);
-        return message;
+        return ChatColorHandler.translate(message);
     }
 
     public void sendMessage(CommandSender sender, String messageName) {

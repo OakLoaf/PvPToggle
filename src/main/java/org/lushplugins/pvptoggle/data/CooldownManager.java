@@ -56,16 +56,20 @@ public class CooldownManager {
 
         switch (cooldownType.toUpperCase()) {
             case "COMMAND" -> {
-                if (seconds >= PvPToggle.getConfigManager().getCommandCooldown()) {
+                if (seconds >= PvPToggle.getInstance().getConfigManager().getCommandCooldown()) {
                     removeCooldown(player, cooldownType);
                     return -1;
-                } else return PvPToggle.getConfigManager().getCommandCooldown() - seconds;
+                } else {
+                    return PvPToggle.getInstance().getConfigManager().getCommandCooldown() - seconds;
+                }
             }
             case "PVP" -> {
-                if (seconds >= PvPToggle.getConfigManager().getPvPCooldown()) {
+                if (seconds >= PvPToggle.getInstance().getConfigManager().getPvPCooldown()) {
                     removeCooldown(player, cooldownType);
                     return -1;
-                } else return PvPToggle.getConfigManager().getPvPCooldown() - seconds;
+                } else {
+                    return PvPToggle.getInstance().getConfigManager().getPvPCooldown() - seconds;
+                }
             }
         }
         return seconds;

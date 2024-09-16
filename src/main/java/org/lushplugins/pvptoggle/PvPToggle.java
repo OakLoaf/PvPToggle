@@ -1,6 +1,7 @@
 package org.lushplugins.pvptoggle;
 
-import org.lushplugins.pvptoggle.hooks.Hook;
+import org.lushplugins.lushlib.hook.Hook;
+import org.lushplugins.lushlib.plugin.SpigotPlugin;
 import org.lushplugins.pvptoggle.hooks.PlaceholderAPIHook;
 import org.lushplugins.pvptoggle.hooks.WorldGuardHook;
 import org.lushplugins.pvptoggle.config.ConfigManager;
@@ -8,82 +9,65 @@ import org.lushplugins.pvptoggle.data.CooldownManager;
 import org.lushplugins.pvptoggle.data.DataManager;
 import org.lushplugins.pvptoggle.listeners.PlayerListener;
 import org.lushplugins.pvptoggle.listeners.PvPListener;
-import org.bukkit.event.Listener;
-import org.bukkit.plugin.PluginManager;
-import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.HashMap;
-
-public final class PvPToggle extends JavaPlugin {
+public final class PvPToggle extends SpigotPlugin {
     private static PvPToggle plugin;
-    private static CooldownManager cooldownManager;
-    private static ConfigManager configManager;
-    private static DataManager dataManager;
-    private static final HashMap<String, Hook> hooks = new HashMap<>();
 
-    @Override
-    public void onEnable() {
-//        plugin = this;
-        cooldownManager = new CooldownManager();
-        configManager = new ConfigManager();
-        configManager.reloadConfig();
-
-        dataManager = new DataManager();
-
-        Listener[] listeners = new Listener[] {
-            new PlayerListener(),
-            new PvPListener()
-        };
-        registerEvents(listeners);
-
-        getCommand("pvp").setExecutor(new PvPCommand());
-
-        PluginManager pluginManager = getServer().getPluginManager();
-        if (pluginManager.getPlugin("PlaceholderAPI") != null) registerHook("PlaceholderAPI", new PlaceholderAPIHook());
-    }
+    private CooldownManager cooldownManager;
+    private ConfigManager configManager;
+    private DataManager dataManager;
 
     @Override
     public void onLoad() {
         plugin = this;
-        PluginManager pluginManager = getServer().getPluginManager();
-        if (pluginManager.getPlugin("WorldGuard") != null) registerHook("WorldGuard", new WorldGuardHook());
+
+        addHook("WorldGuard", () -> registerHook(new WorldGuardHook()));
+    }
+
+    @Override
+    public void onEnable() {
+        cooldownManager = new CooldownManager();
+
+        configManager = new ConfigManager();
+        configManager.reloadConfig();
+
+        dataManager = new DataManager();
+        dataManager.enable();
+
+        new PlayerListener().registerListeners();
+        new PvPListener().registerListeners();
+
+        getCommand("pvp").setExecutor(new PvPCommand());
+
+        addHook("PlaceholderAPI", () -> registerHook(new PlaceholderAPIHook()));
     }
 
     @Override
     public void onDisable() {
-        dataManager.getIoHandler().disableIOHandler();
-    }
-
-    private void registerEvents(Listener[] listeners) {
-        for (Listener listener : listeners) {
-            getServer().getPluginManager().registerEvents(listener, this);
+        if (dataManager != null) {
+            dataManager.disable();
+            dataManager = null;
         }
     }
 
-    public static void registerHook(String hookName, Hook hook) {
-        hooks.put(hookName, hook);
-        hook.enable();
-        PvPToggle.getInstance().getLogger().info(hookName + " hook has been registered.");
-    }
-
-    public static Hook getHook(String hookName) {
-        return hooks.get(hookName);
-    }
-
-
-    public static PvPToggle getInstance() {
-        return plugin;
-    }
-
-    public static CooldownManager getCooldownManager() {
+    public CooldownManager getCooldownManager() {
         return cooldownManager;
     }
 
-    public static ConfigManager getConfigManager() {
+    public ConfigManager getConfigManager() {
         return configManager;
     }
 
-    public static DataManager getDataManager() {
+    public DataManager getDataManager() {
         return dataManager;
+    }
+
+    public void registerHook(Hook hook) {
+        hooks.put(hook.getId(), hook);
+        hook.enable();
+    }
+
+    public static PvPToggle getInstance() {
+        return plugin;
     }
 }

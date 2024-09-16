@@ -1,6 +1,7 @@
 package org.lushplugins.pvptoggle;
 
-import me.dave.chatcolorhandler.ChatColorHandler;
+import org.jetbrains.annotations.NotNull;
+import org.lushplugins.lushlib.libraries.chatcolor.ChatColorHandler;
 import org.lushplugins.pvptoggle.data.PvPUser;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -14,12 +15,13 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.UUID;
 
+// TODO: Move over to LushLib
 public class PvPCommand implements CommandExecutor, TabCompleter {
     private final PvPToggle plugin = PvPToggle.getInstance();
     private final HashSet<UUID> commandTimer = new HashSet<>();
 
     @Override
-    public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, String[] args) {
         if (args.length == 0) {
             if (!(sender instanceof Player player)) {
                 sender.sendMessage("Console cannot run this command!");
@@ -27,8 +29,8 @@ public class PvPCommand implements CommandExecutor, TabCompleter {
             }
 
             ChatColorHandler.sendMessage(player,
-                PvPToggle.getConfigManager().getMessage("pvp-status")
-                    .replace("%pvp-state%", String.valueOf(PvPToggle.getDataManager().getPvPUser(player).isPvPEnabled())));
+                PvPToggle.getInstance().getConfigManager().getMessage("pvp-status")
+                    .replace("%pvp-state%", String.valueOf(PvPToggle.getInstance().getDataManager().getPvPUser(player).isPvPEnabled())));
 
         } else if (args.length == 1) {
             switch (args[0].toLowerCase()) {
@@ -69,14 +71,14 @@ public class PvPCommand implements CommandExecutor, TabCompleter {
                 }
                 case "reload" -> reloadCmd(sender);
                 default -> ChatColorHandler.sendMessage(sender,
-                    PvPToggle.getConfigManager().getMessage("incorrect-usage")
+                    PvPToggle.getInstance().getConfigManager().getMessage("incorrect-usage")
                         .replace("%command-usage%", "/pvp help"));
             }
         } else if (args.length == 2) {
             Player target = Bukkit.getPlayerExact(args[1]);
             if (target == null) {
                 ChatColorHandler.sendMessage(sender,
-                    PvPToggle.getConfigManager().getMessage("unknown-player")
+                    PvPToggle.getInstance().getConfigManager().getMessage("unknown-player")
                         .replace("%player%", args[1]));
                 return true;
             }
@@ -86,7 +88,7 @@ public class PvPCommand implements CommandExecutor, TabCompleter {
                 case "off" -> togglePvPCmd(sender, target, false);
                 case "status" -> statusCmd(sender, target);
                 default -> ChatColorHandler.sendMessage(sender,
-                    PvPToggle.getConfigManager().getMessage("incorrect-usage")
+                    PvPToggle.getInstance().getConfigManager().getMessage("incorrect-usage")
                         .replace("%command-usage%", "/pvp help"));
             }
         }
@@ -94,21 +96,21 @@ public class PvPCommand implements CommandExecutor, TabCompleter {
     }
 
     private void helpCmd(Player player) {
-        PvPToggle.getConfigManager().sendMessage(player, "help-header");
-        PvPToggle.getConfigManager().sendMessage(player, "help-general-usage");
+        PvPToggle.getInstance().getConfigManager().sendMessage(player, "help-header");
+        PvPToggle.getInstance().getConfigManager().sendMessage(player, "help-general-usage");
         if (player.hasPermission("pvptoggle.others"))
-            PvPToggle.getConfigManager().sendMessage(player, "help-view-other");
+            PvPToggle.getInstance().getConfigManager().sendMessage(player, "help-view-other");
         if (player.hasPermission("pvptoggle.admin.others"))
-            PvPToggle.getConfigManager().sendMessage(player, "help-set-other");
+            PvPToggle.getInstance().getConfigManager().sendMessage(player, "help-set-other");
     }
 
     private void reloadCmd(CommandSender sender) {
         if (!sender.hasPermission("pvptoggle.admin.reload")) {
-            PvPToggle.getConfigManager().sendMessage(sender, "no-permission");
+            PvPToggle.getInstance().getConfigManager().sendMessage(sender, "no-permission");
             return;
         }
-        PvPToggle.getConfigManager().reloadConfig();
-        PvPToggle.getConfigManager().sendMessage(sender, "reload");
+        PvPToggle.getInstance().getConfigManager().reloadConfig();
+        PvPToggle.getInstance().getConfigManager().sendMessage(sender, "reload");
     }
 
     private void statusCmd(Player player) {
@@ -118,23 +120,23 @@ public class PvPCommand implements CommandExecutor, TabCompleter {
     private void statusCmd(CommandSender sender, Player target) {
         if (sender != target) {
             if (!sender.hasPermission("pvptoggle.admin.others")) {
-                PvPToggle.getConfigManager().sendMessage(sender, "no-permission");
+                PvPToggle.getInstance().getConfigManager().sendMessage(sender, "no-permission");
                 return;
             }
 
             ChatColorHandler.sendMessage(sender,
-                PvPToggle.getConfigManager().getMessage("pvp-status-other")
+                PvPToggle.getInstance().getConfigManager().getMessage("pvp-status-other")
                     .replace("%player%", target.getName())
-                    .replace("%pvp-state%", String.valueOf(PvPToggle.getDataManager().getPvPUser(target).isPvPEnabled())));
+                    .replace("%pvp-state%", String.valueOf(PvPToggle.getInstance().getDataManager().getPvPUser(target).isPvPEnabled())));
         } else {
             ChatColorHandler.sendMessage(sender,
-                PvPToggle.getConfigManager().getMessage("pvp-status")
-                    .replace("%pvp-state%", String.valueOf(PvPToggle.getDataManager().getPvPUser(target).isPvPEnabled())));
+                PvPToggle.getInstance().getConfigManager().getMessage("pvp-status")
+                    .replace("%pvp-state%", String.valueOf(PvPToggle.getInstance().getDataManager().getPvPUser(target).isPvPEnabled())));
         }
     }
 
     private void togglePvPCmd(Player player) {
-        togglePvPCmd(player, player, !PvPToggle.getDataManager().getPvPUser(player).isPvPEnabled());
+        togglePvPCmd(player, player, !PvPToggle.getInstance().getDataManager().getPvPUser(player).isPvPEnabled());
     }
 
     private void togglePvPCmd(Player player, boolean newPvPState) {
@@ -142,61 +144,59 @@ public class PvPCommand implements CommandExecutor, TabCompleter {
     }
 
     private void togglePvPCmd(CommandSender sender, Player target) {
-        togglePvPCmd(sender, target, PvPToggle.getDataManager().getPvPUser(target).isPvPEnabled());
+        togglePvPCmd(sender, target, PvPToggle.getInstance().getDataManager().getPvPUser(target).isPvPEnabled());
     }
 
     private void togglePvPCmd(CommandSender sender, Player target, boolean newPvPState) {
         if (!sender.hasPermission("pvptoggle.use")) {
-            PvPToggle.getConfigManager().sendMessage(sender, "no-permission");
+            PvPToggle.getInstance().getConfigManager().sendMessage(sender, "no-permission");
             return;
         }
+
         int timeTillExecute = 0;
         UUID targetUUID = target.getUniqueId();
         if (sender != target) {
             if (!sender.hasPermission("pvptoggle.admin.others")) {
-                PvPToggle.getConfigManager().sendMessage(sender, "no-permission");
+                PvPToggle.getInstance().getConfigManager().sendMessage(sender, "no-permission");
                 return;
             }
         } else {
             if (!target.hasPermission("pvptoggle.bypasscooldown")) {
                 if (commandTimer.contains(targetUUID)) {
-                    PvPToggle.getConfigManager().sendMessage(sender, "command-running");
+                    PvPToggle.getInstance().getConfigManager().sendMessage(sender, "command-running");
                     return;
                 }
-                if (!(sender instanceof Player player)) {
-                    sender.sendMessage("Console cannot run this command!");
-                    return;
-                }
-                long cooldown = PvPToggle.getCooldownManager().getCooldown(player);
+
+                long cooldown = PvPToggle.getInstance().getCooldownManager().getCooldown(target);
                 if (cooldown >= 0) {
-                    ChatColorHandler.sendMessage(target, PvPToggle.getConfigManager().getMessage("pvp-cooldown")
+                    ChatColorHandler.sendMessage(target, PvPToggle.getInstance().getConfigManager().getMessage("pvp-cooldown")
                         .replace("%seconds%", String.valueOf(cooldown)));
                     return;
                 }
-                timeTillExecute = PvPToggle.getConfigManager().getCommandWaitTime();
+                timeTillExecute = PvPToggle.getInstance().getConfigManager().getCommandWaitTime();
             }
         }
 
         if (timeTillExecute > 0) {
-            ChatColorHandler.sendMessage(target, PvPToggle.getConfigManager().getMessage("command-timer")
+            ChatColorHandler.sendMessage(target, PvPToggle.getInstance().getConfigManager().getMessage("command-timer")
                 .replace("%seconds%", String.valueOf(timeTillExecute)));
             commandTimer.add(targetUUID);
         }
         Bukkit.getScheduler().runTaskLater(plugin, () -> {
-            PvPUser pvpUser = PvPToggle.getDataManager().getPvPUser(target);
+            PvPUser pvpUser = PvPToggle.getInstance().getDataManager().getPvPUser(target);
             pvpUser.setPvPEnabled(newPvPState);
-            PvPToggle.getCooldownManager().setCooldown(target, "COMMAND");
+            PvPToggle.getInstance().getCooldownManager().setCooldown(target, "COMMAND");
             commandTimer.remove(targetUUID);
 
             if (newPvPState) {
-                PvPToggle.getConfigManager().sendMessage(target, "pvp-state-enabled");
+                PvPToggle.getInstance().getConfigManager().sendMessage(target, "pvp-state-enabled");
             } else {
-                PvPToggle.getConfigManager().sendMessage(target, "pvp-state-disabled");
+                PvPToggle.getInstance().getConfigManager().sendMessage(target, "pvp-state-disabled");
             }
 
             if (sender != target) {
                 ChatColorHandler.sendMessage(sender,
-                    PvPToggle.getConfigManager().getMessage("pvp-state-changed-other")
+                    PvPToggle.getInstance().getConfigManager().getMessage("pvp-state-changed-other")
                         .replace("%player%", target.getName())
                         .replace("%pvp-state%", String.valueOf(newPvPState)));
             }
@@ -204,21 +204,21 @@ public class PvPCommand implements CommandExecutor, TabCompleter {
     }
 
     @Override
-    public List<String> onTabComplete(CommandSender commandSender, Command command, String label, String[] args) {
+    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
         List<String> tabComplete = new ArrayList<>();
         List<String> wordCompletion = new ArrayList<>();
         boolean wordCompletionSuccess = false;
         if (args.length == 1) {
             tabComplete.add("help");
             tabComplete.add("status");
-            if (commandSender.hasPermission("pvptoggle.use")) {
+            if (sender.hasPermission("pvptoggle.use")) {
                 tabComplete.add("toggle");
                 tabComplete.add("on");
                 tabComplete.add("off");
             }
-            if (commandSender.hasPermission("pvptoggle.admin.reload")) tabComplete.add("reload");
+            if (sender.hasPermission("pvptoggle.admin.reload")) tabComplete.add("reload");
         } else if (args.length == 2) {
-            if (commandSender.hasPermission("pvptoggle.admin.others")) {
+            if (sender.hasPermission("pvptoggle.admin.others")) {
                 for (Player player : Bukkit.getOnlinePlayers()) {
                     tabComplete.add(player.getName());
                 }

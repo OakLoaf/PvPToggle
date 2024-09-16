@@ -11,21 +11,17 @@ import java.io.File;
 import java.io.IOException;
 import java.util.UUID;
 
-public class YmlStorage implements Storage<PvPUser> {
-    private final PvPToggle plugin = PvPToggle.getInstance();
-    private final File dataFolder = new File(plugin.getDataFolder(), "data");
-
-    public YmlStorage() {
-        // TODO: Remove in future
-        dataUpdater();
-    }
+public class YmlStorage implements Storage<PvPUser, UUID> {
+    private final File dataFolder = new File(PvPToggle.getInstance().getDataFolder(), "data");
 
     @Override
     public PvPUser load(UUID uuid) {
         ConfigurationSection configurationSection = loadOrCreateFile(uuid);
-        String name = configurationSection.getString("name");
-        boolean pvpEnabled = configurationSection.getBoolean("pvp-enabled");
-        return new PvPUser(uuid, name, pvpEnabled);
+        return new PvPUser(
+            uuid,
+            configurationSection.getString("name"),
+            configurationSection.getBoolean("pvp-enabled")
+        );
     }
 
     @Override
@@ -33,9 +29,12 @@ public class YmlStorage implements Storage<PvPUser> {
         YamlConfiguration yamlConfiguration = loadOrCreateFile(pvpUser.getUUID());
 
         String username = pvpUser.getUsername();
-        if (username == null) username = "Error: Could not get username, will load when the player next joins";
-        yamlConfiguration.set("name", username);
+        if (username != null) {
+            yamlConfiguration.set("name", username);
+        }
+
         yamlConfiguration.set("pvp-enabled", pvpUser.isPvPEnabled());
+
         File file = new File(dataFolder, pvpUser.getUUID().toString() + ".yml");
         try {
             yamlConfiguration.save(file);
@@ -44,40 +43,22 @@ public class YmlStorage implements Storage<PvPUser> {
         }
     }
 
-    public YamlConfiguration loadOrCreateFile(UUID uuid) {
+    private YamlConfiguration loadOrCreateFile(UUID uuid) {
         File file = new File(dataFolder, uuid.toString() + ".yml");
         YamlConfiguration yamlConfiguration = YamlConfiguration.loadConfiguration(file);
         if (yamlConfiguration.getString("name") == null) {
             Player player = Bukkit.getPlayer(uuid);
 
-            String username;
-            if (player != null) username = player.getName();
-            else username = "Error: Could not get username, will load when the player next joins";
+            String username = player != null ? player.getName() : "Error: Could not get username, will load when the player next joins";
             yamlConfiguration.set("name", username);
-            yamlConfiguration.set("pvp-enabled", PvPToggle.getConfigManager().getDefaultPvPState());
+            yamlConfiguration.set("pvp-enabled", PvPToggle.getInstance().getConfigManager().getDefaultPvPState());
             try {
                 yamlConfiguration.save(file);
-            } catch (IOException err) {
-                err.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
+
         return yamlConfiguration;
-    }
-
-    public void dataUpdater() {
-        if (dataFolder.exists()) return;
-        File file = new File(plugin.getDataFolder(), "data.yml");
-        if (!file.exists()) return;
-
-        YamlConfiguration config = YamlConfiguration.loadConfiguration(file);
-        for (String uuidStr : config.getKeys(false)) {
-            UUID uuid = UUID.fromString(uuidStr);
-            PvPUser pvpUser = new PvPUser(uuid, Bukkit.getOfflinePlayer(uuid).getName(), config.getBoolean(uuidStr + "pvp-enabled"));
-            save(pvpUser);
-        }
-
-        File newFile = new File(plugin.getDataFolder(), "data.yml-outdated");
-        boolean renameSuccess = file.renameTo(newFile);
-        if (!renameSuccess) plugin.getLogger().severe("Failed to rename outdated data.yml file, this no longer works.");
     }
 }

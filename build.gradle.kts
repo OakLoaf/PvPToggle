@@ -12,17 +12,18 @@ repositories {
     mavenLocal()
     maven("https://hub.spigotmc.org/nexus/content/repositories/snapshots/")
     maven("https://oss.sonatype.org/content/groups/public/")
-    maven("https://repo.extendedclip.com/content/repositories/placeholderapi/")
-    maven("https://maven.enginehub.org/repo/")
-    maven("https://jitpack.io")
+    maven("https://repo.extendedclip.com/content/repositories/placeholderapi/") // PlaceholderAPI
+    maven("https://maven.enginehub.org/repo/") // WorldGuard
+    maven("https://repo.xemor.zip/releases/") // EnchantedStorage
+    maven("https://repo.lushplugins.org/snapshots/") // LushLib
 }
 
 dependencies {
     compileOnly("org.spigotmc:spigot-api:1.20-R0.1-SNAPSHOT")
     compileOnly("me.clip:placeholderapi:2.11.2")
     compileOnly("com.sk89q.worldguard:worldguard-bukkit:7.0.9")
-    implementation(files("libs/EnchantedStorage.jar"))
-    implementation("com.github.CoolDCB:ChatColorHandler:v2.1.0")
+    implementation("org.enchantedskies:EnchantedStorage:3.0.0")
+    implementation("org.lushplugins:LushLib:0.8.4.2")
 }
 
 java {
