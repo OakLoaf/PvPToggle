@@ -18,11 +18,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.UUID;
 
-public class PlayerEvents implements Listener {
+public class PlayerListener implements Listener {
     private final PvPToggle plugin;
     private final Particle.DustOptions dustOptions = new Particle.DustOptions(Color.RED, 1.0F);
 
-    public PlayerEvents() {
+    public PlayerListener() {
         plugin = PvPToggle.getInstance();
 
         for (Player player : Bukkit.getOnlinePlayers()) {

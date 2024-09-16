@@ -14,7 +14,7 @@ import org.bukkit.event.player.PlayerFishEvent;
 
 import java.util.Iterator;
 
-public class PvPEvents implements Listener {
+public class PvPListener implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void onEntityDamageEvent(EntityDamageByEntityEvent event) {

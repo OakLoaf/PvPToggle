@@ -6,8 +6,8 @@ import org.lushplugins.pvptoggle.hooks.WorldGuardHook;
 import org.lushplugins.pvptoggle.config.ConfigManager;
 import org.lushplugins.pvptoggle.datamanager.CooldownManager;
 import org.lushplugins.pvptoggle.datamanager.DataManager;
-import org.lushplugins.pvptoggle.listeners.PlayerEvents;
-import org.lushplugins.pvptoggle.listeners.PvPEvents;
+import org.lushplugins.pvptoggle.listeners.PlayerListener;
+import org.lushplugins.pvptoggle.listeners.PvPListener;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -29,8 +29,8 @@ public final class PvPToggle extends JavaPlugin {
         dataManager = new DataManager();
 
         Listener[] listeners = new Listener[] {
-            new PlayerEvents(),
-            new PvPEvents()
+            new PlayerListener(),
+            new PvPListener()
         };
         registerEvents(listeners);
 
