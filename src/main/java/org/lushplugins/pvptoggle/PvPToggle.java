@@ -2,6 +2,7 @@ package org.lushplugins.pvptoggle;
 
 import org.lushplugins.lushlib.hook.Hook;
 import org.lushplugins.lushlib.plugin.SpigotPlugin;
+import org.lushplugins.pvptoggle.command.PvPCommand;
 import org.lushplugins.pvptoggle.hooks.PlaceholderAPIHook;
 import org.lushplugins.pvptoggle.hooks.WorldGuardHook;
 import org.lushplugins.pvptoggle.config.ConfigManager;
