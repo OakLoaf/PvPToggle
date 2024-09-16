@@ -1,6 +1,5 @@
 plugins {
     java
-    `kotlin-dsl`
     `maven-publish`
     id("com.gradleup.shadow") version("8.3.0")
 }
@@ -27,28 +26,31 @@ dependencies {
 }
 
 java {
-    configurations.shadow.get().dependencies.remove(dependencies.gradleApi())
     toolchain.languageVersion.set(JavaLanguageVersion.of(17))
 }
 
-tasks.shadowJar {
-    minimize()
-    configurations = listOf(project.configurations.shadow.get())
-    val folder = System.getenv("pluginFolder_1-20")
-    if (folder != null) destinationDirectory.set(file(folder))
-    archiveFileName.set("${project.name}-${project.version}.jar")
-}
+tasks {
+    withType<JavaCompile> {
+        options.encoding = "UTF-8"
+    }
 
-tasks.withType<JavaCompile>() {
-    options.encoding = "UTF-8"
-}
+    shadowJar {
+        minimize()
 
-// Handles version variables
-tasks.processResources {
-    expand(project.properties)
+        val folder = System.getenv("pluginFolder")
+        if (folder != null) {
+            destinationDirectory.set(file(folder))
+        }
 
-    inputs.property("version", rootProject.version)
-    filesMatching("plugin.yml") {
-        expand("version" to rootProject.version)
+        archiveFileName.set("${project.name}-${project.version}.jar")
+    }
+
+    processResources{
+        expand(project.properties)
+
+        inputs.property("version", rootProject.version)
+        filesMatching("plugin.yml") {
+            expand("version" to rootProject.version)
+        }
     }
 }
