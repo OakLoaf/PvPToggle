@@ -2,7 +2,7 @@ package org.lushplugins.pvptoggle.listeners;
 
 import me.dave.chatcolorhandler.ChatColorHandler;
 import org.lushplugins.pvptoggle.PvPToggle;
-import org.lushplugins.pvptoggle.datamanager.PvPUser;
+import org.lushplugins.pvptoggle.data.PvPUser;
 import org.bukkit.Material;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;

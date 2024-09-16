@@ -1,7 +1,7 @@
 package org.lushplugins.pvptoggle;
 
 import me.dave.chatcolorhandler.ChatColorHandler;
-import org.lushplugins.pvptoggle.datamanager.PvPUser;
+import org.lushplugins.pvptoggle.data.PvPUser;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;

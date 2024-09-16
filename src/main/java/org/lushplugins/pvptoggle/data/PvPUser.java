@@ -1,4 +1,4 @@
-package org.lushplugins.pvptoggle.datamanager;
+package org.lushplugins.pvptoggle.data;
 
 import org.lushplugins.pvptoggle.PvPToggle;
 
