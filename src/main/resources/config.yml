@@ -45,3 +45,6 @@ messages:
   no-permissions: "&#ff6969Insufficient permissions"
   incorrect-usage: "&#ff6969Incorrect usage, try &#d13636%command_usage%"
   unknown-player: "&#ff6969Could not find a player with the name &#d13636%player%"
+
+# Whether the updater and update command should be enabled
+enable-updater: true

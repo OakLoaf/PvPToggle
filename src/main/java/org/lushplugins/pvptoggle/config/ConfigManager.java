@@ -26,6 +26,7 @@ public class ConfigManager {
     private List<String> ignoredWorlds = new ArrayList<>();
     private String placeholderPvPEnabled;
     private String placeholderPvPDisabled;
+    private boolean enableUpdater;
     private final ConcurrentHashMap<String, String> messages = new ConcurrentHashMap<>();
 
     public ConfigManager() {
@@ -52,6 +53,8 @@ public class ConfigManager {
 
         placeholderPvPEnabled = config.getString("placeholder-api.pvp-enabled");
         placeholderPvPDisabled = config.getString("placeholder-api.pvp-disabled");
+
+        enableUpdater = config.getBoolean("enable-updater", true);
 
         messages.clear();
         ConfigurationSection messagesSection = config.getConfigurationSection("messages");
@@ -115,6 +118,10 @@ public class ConfigManager {
 
     public String getPvPDisabledPlaceholder() {
         return placeholderPvPDisabled;
+    }
+
+    public boolean isUpdaterEnabled() {
+        return enableUpdater;
     }
 
     public String getMessage(String messageName) {

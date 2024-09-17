@@ -18,6 +18,10 @@ public class PvPCommand extends Command {
         addSubCommand(new ToggleSubCommand("off"));
         addSubCommand(new ToggleSubCommand("toggle"));
         addSubCommand(new VersionSubCommand(PvPToggle.getInstance()));
+
+        if (PvPToggle.getInstance().getUpdater() != null) {
+            addSubCommand(new UpdateSubCommand());
+        }
     }
 
     @Override

@@ -3,6 +3,7 @@ package org.lushplugins.pvptoggle;
 import org.lushplugins.lushlib.LushLib;
 import org.lushplugins.lushlib.hook.Hook;
 import org.lushplugins.lushlib.plugin.SpigotPlugin;
+import org.lushplugins.pluginupdater.api.updater.Updater;
 import org.lushplugins.pvptoggle.command.PvPCommand;
 import org.lushplugins.pvptoggle.hooks.PlaceholderAPIHook;
 import org.lushplugins.pvptoggle.hooks.WorldGuardHook;
@@ -18,6 +19,7 @@ public final class PvPToggle extends SpigotPlugin {
     private CooldownManager cooldownManager;
     private ConfigManager configManager;
     private DataManager dataManager;
+    private Updater updater;
 
     @Override
     public void onLoad() {
@@ -43,6 +45,14 @@ public final class PvPToggle extends SpigotPlugin {
         getCommand("pvp").setExecutor(new PvPCommand());
 
         addHook("PlaceholderAPI", () -> registerHook(new PlaceholderAPIHook()));
+
+        if (configManager.isUpdaterEnabled()) {
+            updater = new Updater.Builder(this)
+                .spigot("107427")
+                .notificationPermission("pvptoggle.update.notifications")
+                .notify(true)
+                .build();
+        }
     }
 
     @Override
@@ -63,6 +73,10 @@ public final class PvPToggle extends SpigotPlugin {
 
     public DataManager getDataManager() {
         return dataManager;
+    }
+
+    public Updater getUpdater() {
+        return updater;
     }
 
     public void registerHook(Hook hook) {
