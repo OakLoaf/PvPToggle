@@ -49,6 +49,7 @@ public final class PvPToggle extends SpigotPlugin {
         if (configManager.isUpdaterEnabled()) {
             updater = new Updater.Builder(this)
                 .spigot("107427")
+                .checkSchedule(900)
                 .notificationPermission("pvptoggle.update.notifications")
                 .notify(true)
                 .build();
