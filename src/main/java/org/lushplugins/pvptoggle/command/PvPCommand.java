@@ -29,7 +29,7 @@ public class PvPCommand extends Command {
 
         ChatColorHandler.sendMessage(player,
             PvPToggle.getInstance().getConfigManager().getMessage("pvp-status")
-                .replace("%pvp-state%", String.valueOf(PvPToggle.getInstance().getDataManager().getPvPUser(player).isPvPEnabledFriendly())));
+                .replace("%pvp_state%", String.valueOf(PvPToggle.getInstance().getDataManager().getPvPUser(player).isPvPEnabledFriendly())));
 
         return true;
     }

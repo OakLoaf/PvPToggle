@@ -102,7 +102,7 @@ public class ToggleSubCommand extends SubCommand {
                 ChatColorHandler.sendMessage(sender,
                     PvPToggle.getInstance().getConfigManager().getMessage("pvp-state-changed-other")
                         .replace("%player%", target.getName())
-                        .replace("%pvp-state%", String.valueOf(newPvPState)));
+                        .replace("%pvp_state%", String.valueOf(newPvPState)));
             }
         }, timeTillExecute * 20L);
 
