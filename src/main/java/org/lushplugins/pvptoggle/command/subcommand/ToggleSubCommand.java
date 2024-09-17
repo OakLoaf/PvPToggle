@@ -39,11 +39,12 @@ public class ToggleSubCommand extends SubCommand {
                 return true;
             }
 
-            target = Bukkit.getPlayerExact(args[1]);
+            String playerName = args[0];
+            target = Bukkit.getPlayerExact(playerName);
             if (target == null) {
                 ChatColorHandler.sendMessage(sender,
                     PvPToggle.getInstance().getConfigManager().getMessage("unknown-player")
-                        .replace("%player%", args[1]));
+                        .replace("%player%", playerName));
                 return true;
             }
         }
