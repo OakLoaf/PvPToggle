@@ -118,27 +118,15 @@ public class ConfigManager {
     }
 
     public String getMessage(String messageName) {
-        return getMessage(messageName, true);
-    }
-
-    public String getMessage(String messageName, boolean showPrefix) {
         String message = messages.get(messageName);
         if (message == null || message.isBlank()) {
             return null;
         }
 
-        if (showPrefix) {
-            message = messages.getOrDefault("prefix", "") + message;
-        }
-
-        return message;
+        return message.replace("%prefix%", messages.getOrDefault("prefix", ""));
     }
 
     public void sendMessage(CommandSender sender, String messageName) {
-        sendMessage(sender, messageName, true);
-    }
-
-    public void sendMessage(CommandSender sender, String messageName, boolean showPrefix) {
-        ChatColorHandler.sendMessage(sender, getMessage(messageName, showPrefix));
+        ChatColorHandler.sendMessage(sender, getMessage(messageName));
     }
 }
