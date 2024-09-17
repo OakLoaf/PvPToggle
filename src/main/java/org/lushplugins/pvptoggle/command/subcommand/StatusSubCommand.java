@@ -47,7 +47,7 @@ public class StatusSubCommand extends SubCommand {
         ChatColorHandler.sendMessage(sender,
             PvPToggle.getInstance().getConfigManager().getMessage(sender == target ? "pvp-status" : "pvp-status-other")
                 .replace("%player%", target.getName())
-                .replace("%pvp-state%", String.valueOf(PvPToggle.getInstance().getDataManager().getPvPUser(target).isPvPEnabled())));
+                .replace("%pvp-state%", String.valueOf(PvPToggle.getInstance().getDataManager().getPvPUser(target).isPvPEnabledFriendly())));
 
         return true;
     }

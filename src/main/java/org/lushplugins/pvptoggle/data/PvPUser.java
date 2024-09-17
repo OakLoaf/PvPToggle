@@ -44,4 +44,8 @@ public class PvPUser {
     public boolean isPvPEnabled() {
         return this.pvpEnabled;
     }
+
+    public String isPvPEnabledFriendly() {
+        return this.pvpEnabled ? "enabled" : "disabled";
+    }
 }
