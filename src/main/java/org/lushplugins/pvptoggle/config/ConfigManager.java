@@ -131,7 +131,7 @@ public class ConfigManager {
             message = messages.getOrDefault("prefix", "") + message;
         }
 
-        return ChatColorHandler.translate(message);
+        return message;
     }
 
     public void sendMessage(CommandSender sender, String messageName) {
