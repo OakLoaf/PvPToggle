@@ -1,5 +1,6 @@
 package org.lushplugins.pvptoggle;
 
+import org.bukkit.plugin.PluginManager;
 import org.lushplugins.lushlib.LushLib;
 import org.lushplugins.lushlib.hook.Hook;
 import org.lushplugins.lushlib.plugin.SpigotPlugin;
@@ -26,7 +27,11 @@ public final class PvPToggle extends SpigotPlugin {
         plugin = this;
         LushLib.getInstance().enable(this);
 
-        addHook("WorldGuard", () -> registerHook(new WorldGuardHook()));
+        PluginManager pluginManager = getServer().getPluginManager();
+        if (pluginManager.getPlugin("WorldGuard") != null) {
+            getLogger().info("Found plugin \"WorldGuard\". Enabling WorldGuard support.");
+            registerHook(new WorldGuardHook());
+        }
     }
 
     @Override
