@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "org.lushplugins"
-version = "2.0.0-beta1"
+version = "2.0.0-beta2"
 
 repositories {
     mavenCentral()
@@ -23,6 +23,7 @@ dependencies {
     compileOnly("me.clip:placeholderapi:2.11.2")
     compileOnly("com.sk89q.worldguard:worldguard-bukkit:7.0.9")
     implementation("org.enchantedskies:EnchantedStorage:3.0.0")
+    implementation("org.lushplugins.pluginupdater:PluginUpdater-API:0.3.7")
     implementation("org.lushplugins:LushLib:0.8.4.2")
 }
 
@@ -37,6 +38,7 @@ tasks {
 
     shadowJar {
         relocate("org.enchantedskies", "org.lushplugins.lushrewards.libraries.enchantedstorage")
+        relocate("org.lushplugins.pluginupdater", "org.lushplugins.lushrewards.libraries.pluginupdater")
         relocate("org.lushplugins.lushlib", "org.lushplugins.lushrewards.libraries.lushlib")
 
         minimize()
