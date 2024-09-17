@@ -4,10 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import org.lushplugins.lushlib.command.Command;
 import org.lushplugins.lushlib.libraries.chatcolor.ChatColorHandler;
 import org.lushplugins.pvptoggle.PvPToggle;
-import org.lushplugins.pvptoggle.command.subcommand.HelpSubCommand;
-import org.lushplugins.pvptoggle.command.subcommand.ReloadSubCommand;
-import org.lushplugins.pvptoggle.command.subcommand.StatusSubCommand;
-import org.lushplugins.pvptoggle.command.subcommand.ToggleSubCommand;
+import org.lushplugins.pvptoggle.command.subcommand.*;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -21,6 +18,7 @@ public class PvPCommand extends Command {
         addSubCommand(new ToggleSubCommand("on"));
         addSubCommand(new ToggleSubCommand("off"));
         addSubCommand(new ToggleSubCommand("toggle"));
+        addSubCommand(new VersionSubCommand(PvPToggle.getInstance()));
     }
 
     @Override
