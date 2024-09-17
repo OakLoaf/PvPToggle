@@ -36,6 +36,9 @@ tasks {
     }
 
     shadowJar {
+        relocate("org.enchantedskies", "org.lushplugins.lushrewards.libraries.enchantedstorage")
+        relocate("org.lushplugins.lushlib", "org.lushplugins.lushrewards.libraries.lushlib")
+
         minimize()
 
         val folder = System.getenv("pluginFolder")
