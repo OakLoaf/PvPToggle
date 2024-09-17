@@ -2,6 +2,7 @@ name: PvPToggle
 version: ${project.version}
 main: org.lushplugins.pvptoggle.PvPToggle
 api-version: 1.16
+spigot-resource-id: 107427
 softdepend:
   - PlaceholderAPI
   - WorldGuard
