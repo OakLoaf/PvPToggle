@@ -23,7 +23,7 @@ dependencies {
     compileOnly("me.clip:placeholderapi:2.11.2")
     compileOnly("com.sk89q.worldguard:worldguard-bukkit:7.0.9")
     implementation("org.enchantedskies:EnchantedStorage:3.0.0")
-    implementation("org.lushplugins.pluginupdater:PluginUpdater-API:1.0.1")
+    implementation("org.lushplugins.pluginupdater:PluginUpdater-API:1.0.2")
     implementation("org.lushplugins:LushLib:0.8.4.2")
 }
 
