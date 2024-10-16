@@ -15,6 +15,10 @@ public class PvPToggleAPI {
         return PvPToggle.getInstance().getDataManager().getPvPUser(player).isPvPEnabled();
     }
 
+    public static String getMetadataKey() {
+        return METADATA_KEY;
+    }
+
     public static void respectPvPToggle(@NotNull Metadatable metadatable) {
         metadatable.setMetadata(METADATA_KEY, METADATA_VALUE);
     }
