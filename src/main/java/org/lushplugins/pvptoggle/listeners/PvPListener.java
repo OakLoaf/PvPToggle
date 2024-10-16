@@ -1,7 +1,6 @@
 package org.lushplugins.pvptoggle.listeners;
 
 import org.bukkit.event.weather.LightningStrikeEvent;
-import org.bukkit.metadata.FixedMetadataValue;
 import org.lushplugins.lushlib.libraries.chatcolor.ChatColorHandler;
 import org.lushplugins.lushlib.listener.EventListener;
 import org.lushplugins.pvptoggle.PvPToggle;
@@ -40,7 +39,7 @@ public class PvPListener implements EventListener {
         } else if (damageCause instanceof TNTPrimed tntPrimed && tntPrimed.getSource() instanceof Player eventDamager) {
             damager = eventDamager;
         }
-        else if (damageCause instanceof Firework || damageCause.hasMetadata(PvPToggleAPI.METADATA_KEY)) {
+        else if (damageCause instanceof Firework || damageCause.hasMetadata(PvPToggleAPI.getMetadataKey())) {
             if (!attackedHasPvPEnabled) {
                 event.setCancelled(true);
             }
@@ -216,7 +215,7 @@ public class PvPListener implements EventListener {
     @EventHandler(ignoreCancelled = true)
     public void onLightningStrike(LightningStrikeEvent event) {
         if (event.getCause() == LightningStrikeEvent.Cause.TRIDENT) {
-            event.getLightning().setMetadata(PvPToggleAPI.METADATA_KEY, new FixedMetadataValue(PvPToggle.getInstance(), true));
+            PvPToggleAPI.respectPvPToggle(event.getLightning());
         }
     }
 }
