@@ -1,8 +1,11 @@
 package org.lushplugins.pvptoggle.listeners;
 
+import org.bukkit.event.weather.LightningStrikeEvent;
+import org.bukkit.metadata.FixedMetadataValue;
 import org.lushplugins.lushlib.libraries.chatcolor.ChatColorHandler;
 import org.lushplugins.lushlib.listener.EventListener;
 import org.lushplugins.pvptoggle.PvPToggle;
+import org.lushplugins.pvptoggle.api.PvPToggleAPI;
 import org.lushplugins.pvptoggle.data.PvPUser;
 import org.bukkit.Material;
 import org.bukkit.entity.*;
@@ -34,13 +37,14 @@ public class PvPListener implements EventListener {
             damager = eventDamager;
         } else if (damageCause instanceof Projectile projectile && projectile.getShooter() instanceof Player eventDamager) {
             damager = eventDamager;
-        } else if (damageCause instanceof ThrownPotion potion && potion.getShooter() instanceof Player eventDamager) {
+        } else if (damageCause instanceof TNTPrimed tntPrimed && tntPrimed.getSource() instanceof Player eventDamager) {
             damager = eventDamager;
-        } else if (damageCause instanceof  LightningStrike lightning && !lightning.getMetadata("TRIDENT").isEmpty()) {
-            if (!attackedHasPvPEnabled) event.setCancelled(true);
-            return;
-        } else if (damageCause instanceof Firework) {
-            if (!attackedHasPvPEnabled) event.setCancelled(true);
+        }
+        else if (damageCause instanceof Firework || damageCause.hasMetadata(PvPToggleAPI.METADATA_KEY)) {
+            if (!attackedHasPvPEnabled) {
+                event.setCancelled(true);
+            }
+
             return;
         }
 
@@ -209,10 +213,10 @@ public class PvPListener implements EventListener {
         }
     }
 
-//    @EventHandler(ignoreCancelled = true)
-//    public void onLightningStrike(LightningStrikeEvent event) {
-//        if (event.getCause() == LightningStrikeEvent.Cause.TRIDENT) {
-//            event.getLightning().setMetadata("TRIDENT", new FixedMetadataValue(PVPToggle.getInstance(), event.getLightning().getLocation()));
-//        }
-//    }
+    @EventHandler(ignoreCancelled = true)
+    public void onLightningStrike(LightningStrikeEvent event) {
+        if (event.getCause() == LightningStrikeEvent.Cause.TRIDENT) {
+            event.getLightning().setMetadata(PvPToggleAPI.METADATA_KEY, new FixedMetadataValue(PvPToggle.getInstance(), true));
+        }
+    }
 }
