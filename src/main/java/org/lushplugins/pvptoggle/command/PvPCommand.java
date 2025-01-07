@@ -12,6 +12,8 @@ public class PvPCommand extends Command {
 
     public PvPCommand() {
         super("pvp");
+        addSubCommand(new PvPBlockSubCommand());
+        addSubCommand(new PvPUnblockSubCommand());
         addSubCommand(new ReloadSubCommand());
         addSubCommand(new StatusSubCommand());
         addSubCommand(new ToggleSubCommand("on"));
