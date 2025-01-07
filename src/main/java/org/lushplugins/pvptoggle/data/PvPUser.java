@@ -76,7 +76,7 @@ public class PvPUser {
     }
 
     public void setBlockedUsers(List<UUID> blockedUsers) {
-        this.blockedUsers = blockedUsers;
+        this.blockedUsers = new ArrayList<>(blockedUsers);
     }
 
     public boolean canPvPWith(@NotNull PvPUser user) {

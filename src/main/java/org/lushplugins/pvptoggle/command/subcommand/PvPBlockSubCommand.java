@@ -5,10 +5,13 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.lushplugins.lushlib.command.SubCommand;
 import org.lushplugins.lushlib.libraries.chatcolor.ChatColorHandler;
 import org.lushplugins.pvptoggle.PvPToggle;
 import org.lushplugins.pvptoggle.data.PvPUser;
+
+import java.util.List;
 
 // TODO: Update classes from "...SubCommand" to "...Command"
 public class PvPBlockSubCommand extends SubCommand {
@@ -33,7 +36,7 @@ public class PvPBlockSubCommand extends SubCommand {
 
         String targetName = args[0];
         Player target = Bukkit.getPlayer(targetName);
-        if (target == null) {
+        if (target == null || target == player) {
             ChatColorHandler.sendMessage(sender,
                 PvPToggle.getInstance().getConfigManager().getMessage("unknown-player")
                     .replace("%player%", targetName));
@@ -49,5 +52,10 @@ public class PvPBlockSubCommand extends SubCommand {
 
         pvpUser.addBlockedUser(player.getUniqueId());
         return true;
+    }
+
+    @Override
+    public @Nullable List<String> tabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args, @NotNull String[] fullArgs) {
+        return args.length == 1 ? Bukkit.getOnlinePlayers().stream().map(Player::getName).toList() : null;
     }
 }
