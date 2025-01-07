@@ -7,6 +7,7 @@ import org.enchantedskies.EnchantedStorage.IOHandler;
 import org.jetbrains.annotations.NotNull;
 import org.lushplugins.pvptoggle.config.ConfigManager;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.UUID;
@@ -38,7 +39,8 @@ public class DataManager extends Manager {
 
         PvPUser pvpUser = uuidToPvPUser.get(uuid);
         if (pvpUser == null) {
-            pvpUser = new PvPUser(uuid, player.getName(), PvPToggle.getInstance().getConfigManager().getDefaultPvPState());
+            // TODO: Allow returning null if not cached
+            pvpUser = new PvPUser(uuid, player.getName(), PvPToggle.getInstance().getConfigManager().getDefaultPvPState(), new ArrayList<>());
             uuidToPvPUser.put(uuid, pvpUser);
         }
 
@@ -49,7 +51,7 @@ public class DataManager extends Manager {
         UUID uuid = player.getUniqueId();
 
         if (ioHandler == null) {
-            PvPUser pvpUser = new PvPUser(uuid, player.getName(), PvPToggle.getInstance().getConfigManager().getDefaultPvPState());
+            PvPUser pvpUser = new PvPUser(uuid, player.getName(), PvPToggle.getInstance().getConfigManager().getDefaultPvPState(), new ArrayList<>());
             uuidToPvPUser.put(uuid, pvpUser);
             return CompletableFuture.completedFuture(pvpUser);
         }

@@ -93,14 +93,14 @@ public class PlayerListener implements EventListener {
     private void displayParticles(@NotNull Player player) {
         int particlesMode = PvPToggle.getInstance().getConfigManager().getParticlesDisplayMode();
         switch (particlesMode) {
-            case 0 -> player.getWorld().spawnParticle(Particle.REDSTONE, player.getEyeLocation().add(0, 0.5, 0), 0, 0.0D, 1.0D, 0.0D, dustOptions);
+            case 0 -> player.getWorld().spawnParticle(Particle.DUST, player.getEyeLocation().add(0, 0.5, 0), 0, 0.0D, 1.0D, 0.0D, dustOptions);
             case 1 -> {
                 Location pLoc = player.getLocation();
                 HashSet<UUID> pvpEnabledPlayers = PvPToggle.getInstance().getDataManager().getPvPEnabledPlayers();
                 List<Entity> nearbyEntities = player.getNearbyEntities(pLoc.getX(), pLoc.getY(), pLoc.getZ());
                 for (Entity entity : nearbyEntities) {
                     if (entity instanceof Player nearbyPlayer && pvpEnabledPlayers.contains(nearbyPlayer.getUniqueId())) {
-                        nearbyPlayer.spawnParticle(Particle.REDSTONE, player.getEyeLocation().add(0, 0.5, 0), 0, 0.0D, 1.0D, 0.0D, dustOptions);
+                        nearbyPlayer.spawnParticle(Particle.DUST, player.getEyeLocation().add(0, 0.5, 0), 0, 0.0D, 1.0D, 0.0D, dustOptions);
                     }
                 }
             }

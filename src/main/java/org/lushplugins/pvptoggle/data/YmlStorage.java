@@ -9,6 +9,7 @@ import org.enchantedskies.EnchantedStorage.Storage;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.UUID;
 
 public class YmlStorage implements Storage<PvPUser, UUID> {
@@ -20,7 +21,8 @@ public class YmlStorage implements Storage<PvPUser, UUID> {
         return new PvPUser(
             uuid,
             configurationSection.getString("name"),
-            configurationSection.getBoolean("pvp-enabled")
+            configurationSection.getBoolean("pvp-enabled"),
+            configurationSection.getStringList("blocked-users").stream().map(UUID::fromString).toList()
         );
     }
 
@@ -34,6 +36,7 @@ public class YmlStorage implements Storage<PvPUser, UUID> {
         }
 
         yamlConfiguration.set("pvp-enabled", pvpUser.isPvPEnabled());
+        yamlConfiguration.set("blocked-users", pvpUser.getBlockedUsers().stream().map(UUID::toString).toList());
 
         File file = new File(dataFolder, pvpUser.getUUID().toString() + ".yml");
         try {
@@ -52,6 +55,7 @@ public class YmlStorage implements Storage<PvPUser, UUID> {
             String username = player != null ? player.getName() : "Error: Could not get username, will load when the player next joins";
             yamlConfiguration.set("name", username);
             yamlConfiguration.set("pvp-enabled", PvPToggle.getInstance().getConfigManager().getDefaultPvPState());
+            yamlConfiguration.set("blocked-users", Collections.emptyList());
             try {
                 yamlConfiguration.save(file);
             } catch (IOException e) {

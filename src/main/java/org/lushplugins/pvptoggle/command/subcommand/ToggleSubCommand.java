@@ -9,6 +9,7 @@ import org.jetbrains.annotations.Nullable;
 import org.lushplugins.lushlib.command.SubCommand;
 import org.lushplugins.lushlib.libraries.chatcolor.ChatColorHandler;
 import org.lushplugins.pvptoggle.PvPToggle;
+import org.lushplugins.pvptoggle.data.CooldownManager;
 import org.lushplugins.pvptoggle.data.PvPUser;
 
 import java.util.HashSet;
@@ -89,7 +90,7 @@ public class ToggleSubCommand extends SubCommand {
         Bukkit.getScheduler().runTaskLater(PvPToggle.getInstance(), () -> {
             PvPUser pvpUser = PvPToggle.getInstance().getDataManager().getPvPUser(target);
             pvpUser.setPvPEnabled(newPvPState);
-            PvPToggle.getInstance().getCooldownManager().setCooldown(target, "COMMAND");
+            PvPToggle.getInstance().getCooldownManager().setCooldown(target, CooldownManager.CooldownType.COMMAND);
             commandTimer.remove(targetUUID);
 
             if (newPvPState) {

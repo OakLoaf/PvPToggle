@@ -12,22 +12,32 @@ public class CooldownManager {
     public final HashMap<UUID, Long> commandCooldown = new HashMap<>();
     public final HashMap<UUID, Long> pvpCooldown = new HashMap<>();
 
+    @Deprecated
     public void setCooldown(Player player, String cooldownType) {
-        switch (cooldownType.toUpperCase()) {
-            case "COMMAND" -> commandCooldown.put(player.getUniqueId(), LocalDateTime.now().toEpochSecond(ZoneOffset.UTC));
-            case "PVP" -> pvpCooldown.put(player.getUniqueId(), LocalDateTime.now().toEpochSecond(ZoneOffset.UTC));
-            case "ALL" -> {
+        setCooldown(player, CooldownType.valueOf(cooldownType.toUpperCase()));
+    }
+
+    public void setCooldown(Player player, CooldownType cooldownType) {
+        switch (cooldownType) {
+            case COMMAND -> commandCooldown.put(player.getUniqueId(), LocalDateTime.now().toEpochSecond(ZoneOffset.UTC));
+            case PVP -> pvpCooldown.put(player.getUniqueId(), LocalDateTime.now().toEpochSecond(ZoneOffset.UTC));
+            case ALL -> {
                 commandCooldown.put(player.getUniqueId(), LocalDateTime.now().toEpochSecond(ZoneOffset.UTC));
                 pvpCooldown.put(player.getUniqueId(), LocalDateTime.now().toEpochSecond(ZoneOffset.UTC));
             }
         }
     }
 
+    @Deprecated
     public void removeCooldown(Player player, String cooldownType) {
-        switch (cooldownType.toUpperCase()) {
-            case "COMMAND" -> commandCooldown.remove(player.getUniqueId(), LocalDateTime.now().toEpochSecond(ZoneOffset.UTC));
-            case "PVP" -> pvpCooldown.remove(player.getUniqueId(), LocalDateTime.now().toEpochSecond(ZoneOffset.UTC));
-            case "ALL" -> {
+        removeCooldown(player, CooldownType.valueOf(cooldownType.toUpperCase()));
+    }
+
+    public void removeCooldown(Player player, CooldownType cooldownType) {
+        switch (cooldownType) {
+            case COMMAND -> commandCooldown.remove(player.getUniqueId(), LocalDateTime.now().toEpochSecond(ZoneOffset.UTC));
+            case PVP -> pvpCooldown.remove(player.getUniqueId(), LocalDateTime.now().toEpochSecond(ZoneOffset.UTC));
+            case ALL -> {
                 commandCooldown.remove(player.getUniqueId(), LocalDateTime.now().toEpochSecond(ZoneOffset.UTC));
                 pvpCooldown.remove(player.getUniqueId(), LocalDateTime.now().toEpochSecond(ZoneOffset.UTC));
             }
@@ -35,17 +45,22 @@ public class CooldownManager {
     }
 
     public long getCooldown(Player player) {
-        long commandCooldown = getCooldown(player, "COMMAND");
-        long pvpCooldown = getCooldown(player, "PVP");
+        long commandCooldown = getCooldown(player, CooldownType.COMMAND);
+        long pvpCooldown = getCooldown(player, CooldownType.PVP);
         return Math.max(commandCooldown, pvpCooldown);
     }
 
+    @Deprecated
     public long getCooldown(Player player, String cooldownType) {
+        return getCooldown(player, CooldownType.valueOf(cooldownType.toUpperCase()));
+    }
+
+    public long getCooldown(Player player, CooldownType cooldownType) {
         if (player.hasPermission("pvptoggle.bypasscooldown")) return -1;
         HashMap<UUID, Long> cooldownCheck = null;
-        switch (cooldownType.toUpperCase()) {
-            case "COMMAND" -> cooldownCheck = commandCooldown;
-            case "PVP" -> cooldownCheck = pvpCooldown;
+        switch (cooldownType) {
+            case COMMAND -> cooldownCheck = commandCooldown;
+            case PVP -> cooldownCheck = pvpCooldown;
         }
         if (cooldownCheck == null) return -1;
         UUID playerUUID = player.getUniqueId();
@@ -54,8 +69,8 @@ public class CooldownManager {
         long currentTime = LocalDateTime.now().toEpochSecond(ZoneOffset.UTC);
         long seconds = currentTime - startTime;
 
-        switch (cooldownType.toUpperCase()) {
-            case "COMMAND" -> {
+        switch (cooldownType) {
+            case COMMAND -> {
                 if (seconds >= PvPToggle.getInstance().getConfigManager().getCommandCooldown()) {
                     removeCooldown(player, cooldownType);
                     return -1;
@@ -63,7 +78,7 @@ public class CooldownManager {
                     return PvPToggle.getInstance().getConfigManager().getCommandCooldown() - seconds;
                 }
             }
-            case "PVP" -> {
+            case PVP -> {
                 if (seconds >= PvPToggle.getInstance().getConfigManager().getPvPCooldown()) {
                     removeCooldown(player, cooldownType);
                     return -1;
@@ -73,5 +88,11 @@ public class CooldownManager {
             }
         }
         return seconds;
+    }
+
+    public enum CooldownType {
+        ALL,
+        COMMAND,
+        PVP
     }
 }
