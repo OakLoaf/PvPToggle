@@ -92,6 +92,7 @@ public class DataManager extends Manager {
         pvpEnabledPlayers.remove(uuid);
     }
 
+    @Deprecated
     public IOHandler<PvPUser, UUID> getIoHandler() {
         return ioHandler;
     }
