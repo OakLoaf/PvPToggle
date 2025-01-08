@@ -63,7 +63,7 @@ public class PvPUser {
         return blockedUsers;
     }
 
-    public boolean isBlockedUser(UUID uuid) {
+    public boolean hasBlockedUser(UUID uuid) {
         return blockedUsers.contains(uuid);
     }
 
@@ -80,7 +80,7 @@ public class PvPUser {
     }
 
     public boolean canPvPWith(@NotNull PvPUser user) {
-        return pvpEnabled && user.isPvPEnabled() && !isBlockedUser(user.getUUID()) && !user.isBlockedUser(uuid);
+        return pvpEnabled && user.isPvPEnabled() && !hasBlockedUser(user.getUUID()) && !user.hasBlockedUser(uuid);
     }
 
     public InteractionState canDamage(@NotNull PvPUser user) {
@@ -90,9 +90,9 @@ public class PvPUser {
             return InteractionState.ORIGIN_PVP_DISABLED;
         } else if (!user.isPvPEnabled()) {
             return InteractionState.OTHER_PVP_DISABLED;
-        } else if (!user.isBlockedUser(uuid)) {
+        } else if (user.hasBlockedUser(uuid)) {
             return InteractionState.ORIGIN_BLOCKED;
-        } else if (!isBlockedUser(user.getUUID())) {
+        } else if (hasBlockedUser(user.getUUID())) {
             return InteractionState.OTHER_BLOCKED;
         } else {
             return InteractionState.ALLOWED;
