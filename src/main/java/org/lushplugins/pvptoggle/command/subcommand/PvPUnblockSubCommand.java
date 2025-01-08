@@ -51,7 +51,7 @@ public class PvPUnblockSubCommand extends SubCommand {
         }
 
         pvpUser.removeBlockedUser(player.getUniqueId());
-        ChatColorHandler.sendMessage(player, PvPToggle.getInstance().getConfigManager().getMessage("blocked-player")
+        ChatColorHandler.sendMessage(player, PvPToggle.getInstance().getConfigManager().getMessage("unblocked-player")
             .replace("%player%", targetName));
         return true;
     }
