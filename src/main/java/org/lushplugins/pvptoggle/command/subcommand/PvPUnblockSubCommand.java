@@ -44,7 +44,7 @@ public class PvPUnblockSubCommand extends SubCommand {
         }
 
         PvPUser pvpUser = PvPToggle.getInstance().getDataManager().getPvPUser(player);
-        if (!pvpUser.hasBlockedUser(player.getUniqueId())) {
+        if (!pvpUser.hasBlockedUser(target.getUniqueId())) {
             ChatColorHandler.sendMessage(player, PvPToggle.getInstance().getConfigManager().getMessage("not-blocked")
                 .replace("%player%", targetName));
             return true;
