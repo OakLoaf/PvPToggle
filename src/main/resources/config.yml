@@ -44,6 +44,8 @@ messages:
   pvp-region-disabled: "%prefix%&#b7faa2The region you have entered ignores your pvp state - be careful!"
   command-timer: "&#ffda54PvP state changing in &#e0c01b%seconds% &#ffda54seconds."
   command-running: "&#ff6969This command is already running"
+  blocked-player: "&#d13636%player% &#ff6969is no longer able to pvp with you"
+  unblocked-player: "&#d13636%player% &#ff6969is now able to pvp with you"
   already-blocked: "&#d13636%player% &#ff6969is already blocked"
   not-blocked: "&#d13636%player% &#ff6969is not blocked"
   no-permissions: "&#ff6969Insufficient permissions"
