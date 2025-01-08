@@ -3,22 +3,27 @@ package org.lushplugins.pvptoggle.data;
 import org.jetbrains.annotations.NotNull;
 import org.lushplugins.pvptoggle.PvPToggle;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 public class PvPUser {
     private final UUID uuid;
     private String username;
     private boolean pvpEnabled;
-    private List<UUID> blockedUsers;
+    private Set<UUID> blockedUsers;
 
     @Deprecated
     public PvPUser(UUID uuid, String username, boolean pvpEnabled) {
-        this(uuid, username, pvpEnabled, new ArrayList<>());
+        this(uuid, username, pvpEnabled, new HashSet<>());
     }
 
     public PvPUser(UUID uuid, String username, boolean pvpEnabled, List<UUID> blockedUsers) {
+        this(uuid, username, pvpEnabled, new HashSet<>(blockedUsers));
+    }
+
+    public PvPUser(UUID uuid, String username, boolean pvpEnabled, Set<UUID> blockedUsers) {
         this.uuid = uuid;
         this.username = username;
         this.pvpEnabled = pvpEnabled;
@@ -59,7 +64,7 @@ public class PvPUser {
         return this.pvpEnabled ? "enabled" : "disabled";
     }
 
-    public List<UUID> getBlockedUsers() {
+    public Set<UUID> getBlockedUsers() {
         return blockedUsers;
     }
 
@@ -69,14 +74,17 @@ public class PvPUser {
 
     public void addBlockedUser(UUID uuid) {
         this.blockedUsers.add(uuid);
+        PvPToggle.getInstance().getDataManager().savePvPUser(this);
     }
 
     public void removeBlockedUser(UUID uuid) {
         this.blockedUsers.remove(uuid);
+        PvPToggle.getInstance().getDataManager().savePvPUser(this);
     }
 
     public void setBlockedUsers(List<UUID> blockedUsers) {
-        this.blockedUsers = new ArrayList<>(blockedUsers);
+        this.blockedUsers = new HashSet<>(blockedUsers);
+        PvPToggle.getInstance().getDataManager().savePvPUser(this);
     }
 
     public boolean canPvPWith(@NotNull PvPUser user) {

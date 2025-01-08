@@ -9,7 +9,6 @@ import org.enchantedskies.EnchantedStorage.Storage;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -24,7 +23,7 @@ public class YmlStorage implements Storage<PvPUser, UUID> {
             uuid,
             configurationSection.getString("name"),
             configurationSection.getBoolean("pvp-enabled"),
-            configurationSection.getStringList("blocked-users").stream().map(UUID::fromString).collect(Collectors.toCollection(ArrayList::new))
+            configurationSection.getStringList("blocked-users").stream().map(UUID::fromString).collect(Collectors.toSet())
         );
     }
 
