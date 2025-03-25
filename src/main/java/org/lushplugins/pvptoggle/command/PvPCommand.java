@@ -8,6 +8,7 @@ import org.lushplugins.pvptoggle.command.subcommand.*;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+// TODO: Move to Jackson
 public class PvPCommand extends Command {
 
     public PvPCommand() {
