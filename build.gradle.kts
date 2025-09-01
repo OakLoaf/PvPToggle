@@ -15,7 +15,7 @@ repositories {
     maven("https://repo.extendedclip.com/content/repositories/placeholderapi/") // PlaceholderAPI
     maven("https://maven.enginehub.org/repo/") // WorldGuard
     maven("https://repo.xemor.zip/releases/") // EnchantedStorage
-    maven("https://repo.lushplugins.org/snapshots/") // LushLib, PluginUpdater
+    maven("https://repo.lushplugins.org/snapshots/") // LushLib, PluginUpdater, PlaceholderHandler
 }
 
 dependencies {
@@ -31,6 +31,7 @@ dependencies {
     implementation("org.enchantedskies:EnchantedStorage:3.0.0")
     implementation("io.github.revxrsal:lamp.common:4.0.0-rc.12")
     implementation("io.github.revxrsal:lamp.bukkit:4.0.0-rc.12")
+    implementation("org.lushplugins:PlaceholderHandler:1.0.0-alpha6")
     implementation("org.lushplugins.pluginupdater:PluginUpdater-API:1.0.2")
 }
 

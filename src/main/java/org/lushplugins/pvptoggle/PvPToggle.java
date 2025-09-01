@@ -3,17 +3,19 @@ package org.lushplugins.pvptoggle;
 import org.lushplugins.lushlib.LushLib;
 import org.lushplugins.lushlib.hook.Hook;
 import org.lushplugins.lushlib.plugin.SpigotPlugin;
+import org.lushplugins.placeholderhandler.PlaceholderHandler;
 import org.lushplugins.pluginupdater.api.updater.Updater;
 import org.lushplugins.pvptoggle.command.PvPCommand;
 import org.lushplugins.pvptoggle.command.ToggleCommand;
 import org.lushplugins.pvptoggle.command.UpdateCommand;
-import org.lushplugins.pvptoggle.hooks.PlaceholderAPIHook;
+import org.lushplugins.pvptoggle.data.PvPUser;
 import org.lushplugins.pvptoggle.hooks.WorldGuardHook;
 import org.lushplugins.pvptoggle.config.ConfigManager;
 import org.lushplugins.pvptoggle.data.CooldownManager;
 import org.lushplugins.pvptoggle.data.DataManager;
 import org.lushplugins.pvptoggle.listeners.PlayerListener;
 import org.lushplugins.pvptoggle.listeners.PvPListener;
+import org.lushplugins.pvptoggle.placeholder.Placeholders;
 import org.lushplugins.pvptoggle.util.lamp.response.StringMessageResponseHandler;
 import revxrsal.commands.Lamp;
 import revxrsal.commands.bukkit.BukkitLamp;
@@ -58,7 +60,13 @@ public final class PvPToggle extends SpigotPlugin {
             new ToggleCommand()
         );
 
-        ifPluginPresent("PlaceholderAPI", () -> registerHook(new PlaceholderAPIHook()));
+        PlaceholderHandler.builder(this)
+            .registerParameterProvider(PvPUser.class, (type, parameter, context) -> {
+                return PvPToggle.getInstance().getDataManager().getPvPUser(context.player());
+            })
+            .registerParameterProvider(String.class, (type, parameter, context) -> parameter) // TODO: Migrate to PlaceholderHandler
+            .build()
+            .register(new Placeholders());
 
         if (configManager.isUpdaterEnabled()) {
             updater = new Updater.Builder(this)
