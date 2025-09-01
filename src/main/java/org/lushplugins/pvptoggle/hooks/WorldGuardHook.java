@@ -18,10 +18,9 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Comparator;
-import java.util.EventListener;
 import java.util.List;
 
-public class WorldGuardHook extends Hook implements EventListener {
+public class WorldGuardHook extends Hook {
     private static StateFlag PVP_TOGGLE_FLAG;
 
     public WorldGuardHook() {
