@@ -35,7 +35,7 @@ dependencies {
 }
 
 java {
-    toolchain.languageVersion.set(JavaLanguageVersion.of(17))
+    toolchain.languageVersion.set(JavaLanguageVersion.of(21))
 
     withSourcesJar()
 }
@@ -46,9 +46,10 @@ tasks {
     }
 
     shadowJar {
-        relocate("org.enchantedskies", "org.lushplugins.lushrewards.libraries.enchantedstorage")
-        relocate("org.lushplugins.pluginupdater", "org.lushplugins.lushrewards.libraries.pluginupdater")
-        relocate("org.lushplugins.lushlib", "org.lushplugins.lushrewards.libraries.lushlib")
+        relocate("org.lushplugins.lushlib", "org.lushplugins.pvptoggle.libraries.lushlib")
+        relocate("org.enchantedskies", "org.lushplugins.pvptoggle.libraries.enchantedstorage")
+        relocate("org.lushplugins.placeholderhandler", "org.lushplugins.pvptoggle.libraries.placeholderhandler")
+        relocate("org.lushplugins.pluginupdater", "org.lushplugins.pvptoggle.libraries.pluginupdater")
 
         minimize()
 
