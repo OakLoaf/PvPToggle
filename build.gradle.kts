@@ -19,12 +19,19 @@ repositories {
 }
 
 dependencies {
+    // Dependencies
     compileOnly("org.spigotmc:spigot-api:1.21.4-R0.1-SNAPSHOT")
+
+    // Soft Dependencies
     compileOnly("me.clip:placeholderapi:2.11.2")
     compileOnly("com.sk89q.worldguard:worldguard-bukkit:7.0.9")
+
+    // Libraries
+    implementation("org.lushplugins:LushLib:0.10.82")
     implementation("org.enchantedskies:EnchantedStorage:3.0.0")
+    implementation("io.github.revxrsal:lamp.common:4.0.0-rc.12")
+    implementation("io.github.revxrsal:lamp.bukkit:4.0.0-rc.12")
     implementation("org.lushplugins.pluginupdater:PluginUpdater-API:1.0.2")
-    implementation("org.lushplugins:LushLib:0.8.4.2")
 }
 
 java {

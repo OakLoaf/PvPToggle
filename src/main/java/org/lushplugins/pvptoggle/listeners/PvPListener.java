@@ -1,11 +1,11 @@
 package org.lushplugins.pvptoggle.listeners;
 
 import org.bukkit.event.Cancellable;
+import org.bukkit.event.Listener;
 import org.bukkit.event.weather.LightningStrikeEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.lushplugins.lushlib.libraries.chatcolor.ChatColorHandler;
-import org.lushplugins.lushlib.listener.EventListener;
 import org.lushplugins.pvptoggle.PvPToggle;
 import org.lushplugins.pvptoggle.api.PvPToggleAPI;
 import org.lushplugins.pvptoggle.data.CooldownManager;
@@ -19,7 +19,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.PotionSplashEvent;
 import org.bukkit.event.player.PlayerFishEvent;
 
-public class PvPListener implements EventListener {
+public class PvPListener implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void onEntityDamageEvent(EntityDamageByEntityEvent event) {

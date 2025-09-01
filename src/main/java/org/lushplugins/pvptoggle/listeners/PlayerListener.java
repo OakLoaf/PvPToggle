@@ -1,6 +1,6 @@
 package org.lushplugins.pvptoggle.listeners;
 
-import org.lushplugins.lushlib.listener.EventListener;
+import org.bukkit.event.Listener;
 import org.lushplugins.pvptoggle.PvPToggle;
 import org.lushplugins.pvptoggle.hooks.WorldGuardHook;
 import org.bukkit.*;
@@ -17,7 +17,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.UUID;
 
-public class PlayerListener implements EventListener {
+public class PlayerListener implements Listener {
     private final Particle.DustOptions dustOptions = new Particle.DustOptions(Color.RED, 1.0F);
 
     public PlayerListener() {

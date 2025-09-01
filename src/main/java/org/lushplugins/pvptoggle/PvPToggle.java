@@ -6,6 +6,8 @@ import org.lushplugins.lushlib.hook.Hook;
 import org.lushplugins.lushlib.plugin.SpigotPlugin;
 import org.lushplugins.pluginupdater.api.updater.Updater;
 import org.lushplugins.pvptoggle.command.PvPCommand;
+import org.lushplugins.pvptoggle.command.ToggleCommand;
+import org.lushplugins.pvptoggle.command.UpdateCommand;
 import org.lushplugins.pvptoggle.hooks.PlaceholderAPIHook;
 import org.lushplugins.pvptoggle.hooks.WorldGuardHook;
 import org.lushplugins.pvptoggle.config.ConfigManager;
@@ -13,6 +15,10 @@ import org.lushplugins.pvptoggle.data.CooldownManager;
 import org.lushplugins.pvptoggle.data.DataManager;
 import org.lushplugins.pvptoggle.listeners.PlayerListener;
 import org.lushplugins.pvptoggle.listeners.PvPListener;
+import org.lushplugins.pvptoggle.util.lamp.response.StringMessageResponseHandler;
+import revxrsal.commands.Lamp;
+import revxrsal.commands.bukkit.BukkitLamp;
+import revxrsal.commands.bukkit.actor.BukkitCommandActor;
 
 public final class PvPToggle extends SpigotPlugin {
     private static PvPToggle plugin;
@@ -44,10 +50,18 @@ public final class PvPToggle extends SpigotPlugin {
         dataManager = new DataManager();
         dataManager.enable();
 
-        new PlayerListener().registerListeners();
-        new PvPListener().registerListeners();
+        registerListeners(
+            new PlayerListener(),
+            new PvPListener()
+        );
 
-        getCommand("pvp").setExecutor(new PvPCommand());
+        Lamp<BukkitCommandActor> lamp = BukkitLamp.builder(this)
+            .responseHandler(String.class, new StringMessageResponseHandler())
+            .build();
+        lamp.register(
+            new PvPCommand(),
+            new ToggleCommand()
+        );
 
         addHook("PlaceholderAPI", () -> registerHook(new PlaceholderAPIHook()));
 
@@ -58,6 +72,8 @@ public final class PvPToggle extends SpigotPlugin {
                 .notificationPermission("pvptoggle.update.notifications")
                 .notify(true)
                 .build();
+
+            lamp.register(new UpdateCommand());
         }
     }
 
