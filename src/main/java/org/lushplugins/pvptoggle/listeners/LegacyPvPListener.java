@@ -1,9 +1,16 @@
 package org.lushplugins.pvptoggle.listeners;
 
+import org.bukkit.Material;
 import org.bukkit.damage.DamageSource;
+import org.bukkit.entity.*;
 import org.bukkit.event.Cancellable;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.*;
+import org.bukkit.event.entity.AreaEffectCloudApplyEvent;
+import org.bukkit.event.entity.EntityCombustByEntityEvent;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.PotionSplashEvent;
+import org.bukkit.event.player.PlayerFishEvent;
 import org.bukkit.event.weather.LightningStrikeEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -12,14 +19,9 @@ import org.lushplugins.pvptoggle.PvPToggle;
 import org.lushplugins.pvptoggle.api.PvPToggleAPI;
 import org.lushplugins.pvptoggle.data.CooldownManager;
 import org.lushplugins.pvptoggle.data.PvPUser;
-import org.bukkit.Material;
-import org.bukkit.entity.*;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.player.PlayerFishEvent;
 
-public class PvPListener implements Listener {
+public class LegacyPvPListener implements Listener {
 
-    // TODO: Test all damage types including fireworks and lightning
     @EventHandler(ignoreCancelled = true)
     public void onEntityDamageEvent(EntityDamageByEntityEvent event) {
         if (PvPToggle.getInstance().getConfigManager().isLocationIgnored(event.getEntity().getWorld(), event.getEntity().getLocation())) {
@@ -30,14 +32,28 @@ public class PvPListener implements Listener {
             return;
         }
 
-        PvPUser damagedUser = getPvPUserFromEntity(damagedPlayer);
-        if (damagedUser == null) {
+        PvPUser damaged = getPvPUserFromEntity(damagedPlayer);
+        if (damaged == null) {
             return;
         }
 
-        DamageSource source = event.getDamageSource();
-        Entity damagerEntity = source.getCausingEntity();
-        if (!(damagerEntity instanceof Player damagerPlayer) || damagerPlayer == damagedPlayer) {
+        Entity damageCause = event.getDamager();
+        Player damagerPlayer = null;
+        if (damageCause instanceof Player damager) {
+            damagerPlayer = damager;
+        } else if (damageCause instanceof Projectile projectile && projectile.getShooter() instanceof Player damager) {
+            damagerPlayer = damager;
+        } else if (damageCause instanceof TNTPrimed tntPrimed && tntPrimed.getSource() instanceof Player damager) {
+            damagerPlayer = damager;
+        } else if (damageCause instanceof Firework || damageCause.hasMetadata(PvPToggleAPI.getMetadataKey())) {
+            if (damaged.isPvPEnabled()) {
+                event.setCancelled(true);
+            }
+
+            return;
+        }
+
+        if (damagerPlayer == null || damagerPlayer == damagedPlayer) {
             return;
         }
 
