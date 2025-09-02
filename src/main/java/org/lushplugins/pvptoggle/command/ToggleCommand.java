@@ -75,17 +75,20 @@ public class ToggleCommand {
     }
 
     @Subcommand("toggle")
+    // TODO: Permission lock `target` tab-completions
     public String toggle(BukkitCommandActor actor, @Optional Player target) {
         boolean newState = !PvPToggle.getInstance().getDataManager().getPvPUser(target != null ? target : actor.requirePlayer()).isPvPEnabled();
         return toggle(actor, newState, target);
     }
 
     @Subcommand("on")
+    // TODO: Permission lock `target` tab-completions
     public String on(BukkitCommandActor actor, @Optional Player target) {
         return toggle(actor, true, target);
     }
 
     @Subcommand("off")
+    // TODO: Permission lock `target` tab-completions
     public String off(BukkitCommandActor actor, @Optional Player target) {
         return toggle(actor, false, target);
     }

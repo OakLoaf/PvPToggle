@@ -20,6 +20,7 @@ public class PvPCommand {
     }
 
     @Subcommand("status")
+    // TODO: Permission lock `target` tab-completions
     public String status(BukkitCommandActor actor, @Optional Player target) {
         String messageKey;
         if (target != null) {
