@@ -15,6 +15,6 @@ messages:
   pvp-region-disabled: "%prefix%&#b7faa2The region you have entered ignores your pvp state - be careful!"
   command-timer: "&#ffda54PvP state changing in &#e0c01b%seconds% &#ffda54seconds."
   command-running: "&#ff6969This command is already running"
-  no-permissions: "&#ff6969Insufficient permissions"
+  no-permission: "&#ff6969Insufficient permissions"
   incorrect-usage: "&#ff6969Incorrect usage, try &#d13636%command_usage%"
   unknown-player: "&#ff6969Could not find a player with the name &#d13636%player%"

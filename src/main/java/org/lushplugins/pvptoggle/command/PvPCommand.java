@@ -16,7 +16,7 @@ public class PvPCommand {
 
     @Command("pvp")
     public String pvp(BukkitCommandActor actor) {
-        return status(actor, actor.requirePlayer());
+        return status(actor, null);
     }
 
     @Subcommand("status")
