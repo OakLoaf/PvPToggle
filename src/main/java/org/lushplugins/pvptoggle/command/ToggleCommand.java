@@ -76,7 +76,7 @@ public class ToggleCommand {
 
     @Subcommand("toggle")
     public String toggle(BukkitCommandActor actor, @Optional Player target) {
-        boolean newState = !PvPToggle.getInstance().getDataManager().getPvPUser(target).isPvPEnabled();
+        boolean newState = !PvPToggle.getInstance().getDataManager().getPvPUser(target != null ? target : actor.requirePlayer()).isPvPEnabled();
         return toggle(actor, newState, target);
     }
 
