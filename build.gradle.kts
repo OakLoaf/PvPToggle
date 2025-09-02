@@ -6,7 +6,7 @@ plugins {
     `maven-publish`
     id("com.gradleup.shadow") version("8.3.0")
     id("xyz.jpenilla.run-paper") version("2.2.4")
-    id("com.modrinth.minotaur") version ("2.+")
+    id("com.modrinth.minotaur") version("2.+")
 }
 
 group = "org.lushplugins"
