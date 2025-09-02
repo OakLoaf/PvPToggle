@@ -6,9 +6,6 @@ spigot-resource-id: 107427
 softdepend:
   - PlaceholderAPI
   - WorldGuard
-commands:
-  pvp:
-    usage: /pvp
 permissions:
   pvptoggle.use:
     description: Allows Toggling PvP
