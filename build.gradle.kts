@@ -135,12 +135,12 @@ modrinth {
         "1.21", "1.21.1", "1.21.2", "1.21.3", "1.21.4", "1.21.5", "1.21.6", "1.21.7", "1.21.8"
     )
     loaders.addAll("spigot", "paper", "purpur")
-//    syncBodyFrom.set(rootProject.file("README.md").readText()) // TODO: Add README
+    syncBodyFrom.set(rootProject.file("README.md").readText())
 }
 
 tasks.modrinth {
     dependsOn("shadowJar")
-//    dependsOn(tasks.modrinthSyncBody) // TODO
+    dependsOn(tasks.modrinthSyncBody)
 }
 
 fun getCurrentCommitHash(): String {
