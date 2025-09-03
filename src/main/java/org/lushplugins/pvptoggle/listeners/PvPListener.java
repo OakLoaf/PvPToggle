@@ -4,7 +4,6 @@ import org.bukkit.damage.DamageSource;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.*;
-import org.bukkit.event.weather.LightningStrikeEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.lushplugins.lushlib.libraries.chatcolor.ChatColorHandler;
@@ -19,7 +18,6 @@ import org.bukkit.event.player.PlayerFishEvent;
 
 public class PvPListener implements Listener {
 
-    // TODO: Test all damage types including fireworks and lightning
     @EventHandler(ignoreCancelled = true)
     public void onEntityDamageEvent(EntityDamageByEntityEvent event) {
         if (PvPToggle.getInstance().getConfigManager().isLocationIgnored(event.getEntity().getWorld(), event.getEntity().getLocation())) {
@@ -35,13 +33,28 @@ public class PvPListener implements Listener {
             return;
         }
 
+        if (event.getDamager().hasMetadata(PvPToggleAPI.getMetadataKey())) {
+            if (damagedUser.isPvPEnabled()) {
+                event.setCancelled(true);
+            }
+
+            return;
+        }
+
         DamageSource source = event.getDamageSource();
         Entity damagerEntity = source.getCausingEntity();
+        boolean silent = false;
+
+        if (damagerEntity == null && event.getDamager() instanceof LightningStrike lightning) {
+            damagerEntity = lightning.getCausingPlayer();
+            silent = true;
+        }
+
         if (!(damagerEntity instanceof Player damagerPlayer) || damagerPlayer == damagedPlayer) {
             return;
         }
 
-        allowOrCancel(damagerPlayer, damagedPlayer, event);
+        allowOrCancel(damagerPlayer, damagedPlayer, event, silent);
     }
 
     @EventHandler(ignoreCancelled = true)
@@ -161,14 +174,7 @@ public class PvPListener implements Listener {
         allowOrCancel(damagerPlayer, damagedPlayer, event);
     }
 
-    @EventHandler(ignoreCancelled = true)
-    public void onLightningStrike(LightningStrikeEvent event) {
-        if (event.getCause() == LightningStrikeEvent.Cause.TRIDENT) {
-            PvPToggleAPI.respectPvPToggle(event.getLightning());
-        }
-    }
-
-    private void allowOrElse(Player damagerPlayer, Player damagedPlayer, Runnable orElse) {
+    private void allowOrElse(Player damagerPlayer, Player damagedPlayer, boolean silent, Runnable orElse) {
         PvPUser damager = PvPToggle.getInstance().getDataManager().getPvPUser(damagerPlayer);
         PvPUser damaged = PvPToggle.getInstance().getDataManager().getPvPUser(damagedPlayer);
         if (damager == null || damaged == null) {
@@ -178,23 +184,33 @@ public class PvPListener implements Listener {
         switch (damager.canDamage(damaged)) {
             case ORIGIN_PVP_DISABLED -> {
                 orElse.run();
-                PvPToggle.getInstance().getConfigManager().sendMessage(damagerPlayer, "pvp-disabled");
+
+                if (!silent) {
+                    PvPToggle.getInstance().getConfigManager().sendMessage(damagerPlayer, "pvp-disabled");
+                }
             }
             case OTHER_BLOCKED -> {
                 orElse.run();
-                PvPToggle.getInstance().getConfigManager().sendMessage(damagerPlayer, "pvp-blocked");
+
+                if (!silent) {
+                    PvPToggle.getInstance().getConfigManager().sendMessage(damagerPlayer, "pvp-blocked");
+                }
             }
             case OTHER_PVP_DISABLED -> {
                 orElse.run();
-                ChatColorHandler.sendMessage(damagerPlayer,
-                    PvPToggle.getInstance().getConfigManager().getMessage("pvp-disabled-other")
+
+                if (!silent) {
+                    ChatColorHandler.sendMessage(damagerPlayer, PvPToggle.getInstance().getConfigManager().getMessage("pvp-disabled-other")
                         .replace("%player%", damagedPlayer.getName()));
+                }
             }
             case ORIGIN_BLOCKED -> {
                 orElse.run();
-                ChatColorHandler.sendMessage(damagerPlayer,
-                    PvPToggle.getInstance().getConfigManager().getMessage("pvp-blocked-other")
+
+                if (!silent) {
+                    ChatColorHandler.sendMessage(damagerPlayer, PvPToggle.getInstance().getConfigManager().getMessage("pvp-blocked-other")
                         .replace("%player%", damagedPlayer.getName()));
+                }
             }
             default -> {
                 PvPToggle.getInstance().getCooldownManager().setCooldown(damagerPlayer, CooldownManager.CooldownType.PVP);
@@ -203,8 +219,12 @@ public class PvPListener implements Listener {
         }
     }
 
+    private void allowOrCancel(Player damagerPlayer, Player damagedPlayer, Cancellable event, boolean silent) {
+        allowOrElse(damagerPlayer, damagedPlayer, silent, () -> event.setCancelled(true));
+    }
+
     private void allowOrCancel(Player damagerPlayer, Player damagedPlayer, Cancellable event) {
-        allowOrElse(damagerPlayer, damagedPlayer, () -> event.setCancelled(true));
+        allowOrCancel(damagerPlayer, damagedPlayer, event, false);
     }
 
     private @Nullable PvPUser getPvPUserFromEntity(@NotNull Entity entity) {
