@@ -140,7 +140,7 @@ modrinth {
 
 tasks.modrinth {
     dependsOn("shadowJar")
-    dependsOn(tasks.modrinthSyncBody)
+//    dependsOn(tasks.modrinthSyncBody) // TODO
 }
 
 fun getCurrentCommitHash(): String {
