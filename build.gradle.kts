@@ -36,7 +36,7 @@ dependencies {
     implementation("io.github.revxrsal:lamp.common:4.0.0-rc.12")
     implementation("io.github.revxrsal:lamp.bukkit:4.0.0-rc.12")
     implementation("org.lushplugins:PlaceholderHandler:1.0.0-alpha6")
-    implementation("org.lushplugins.pluginupdater:PluginUpdater-API:1.0.2")
+    implementation("org.lushplugins.pluginupdater:PluginUpdater-API:1.0.3")
 }
 
 java {
