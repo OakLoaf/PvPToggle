@@ -1,3 +1,5 @@
+![This project proudly suppports the LGBTQIA+ community](https://raw.githubusercontent.com/OakLoaf/OakLoaf/refs/heads/main/assets/pride.png)
+
 # LushPvPToggle
 A super lightweight PvP toggling plugin to keep your player's safe from scary pvpers, whilst allowing the pvpers 
 to fight amongst themselves! 
