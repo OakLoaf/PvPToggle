@@ -31,7 +31,7 @@ dependencies {
     compileOnly("com.sk89q.worldguard:worldguard-bukkit:7.0.14")
 
     // Libraries
-    implementation("org.lushplugins:LushLib:0.10.83")
+    implementation("org.lushplugins:LushLib:0.10.84")
     implementation("org.enchantedskies:EnchantedStorage:3.0.0") // TODO: Migrate away from
     implementation("io.github.revxrsal:lamp.common:4.0.0-rc.14")
     implementation("io.github.revxrsal:lamp.bukkit:4.0.0-rc.14")
