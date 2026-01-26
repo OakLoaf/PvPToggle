@@ -35,7 +35,7 @@ dependencies {
     implementation("org.enchantedskies:EnchantedStorage:3.0.0") // TODO: Migrate away from
     implementation("io.github.revxrsal:lamp.common:4.0.0-rc.14")
     implementation("io.github.revxrsal:lamp.bukkit:4.0.0-rc.14")
-    implementation("org.lushplugins:PlaceholderHandler:1.0.0-alpha6")
+    implementation("org.lushplugins:PlaceholderHandler:1.0.0-alpha7")
     implementation("org.lushplugins.pluginupdater:PluginUpdater-API:1.0.3")
 }
 
