@@ -28,7 +28,7 @@ dependencies {
     compileOnly("org.spigotmc:spigot-api:1.21.8-R0.1-SNAPSHOT")
 
     // Soft Dependencies
-    compileOnly("com.sk89q.worldguard:worldguard-bukkit:7.0.14")
+    compileOnly("com.sk89q.worldguard:worldguard-bukkit:7.0.15")
 
     // Libraries
     implementation("org.lushplugins:LushLib:0.10.84")
