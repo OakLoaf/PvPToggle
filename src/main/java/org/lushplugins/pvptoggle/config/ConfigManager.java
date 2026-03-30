@@ -1,7 +1,7 @@
 package org.lushplugins.pvptoggle.config;
 
 import org.bukkit.configuration.ConfigurationSection;
-import org.lushplugins.lushlib.libraries.chatcolor.ChatColorHandler;
+import org.lushplugins.lushlib.libraries.chatcolor.paper.PaperColor;
 import org.lushplugins.pvptoggle.PvPToggle;
 import org.lushplugins.pvptoggle.hooks.WorldGuardHook;
 import org.bukkit.Location;
@@ -33,7 +33,7 @@ public class ConfigManager {
         PvPToggle.getInstance().saveDefaultConfig();
     }
 
-    public void reloadConfig() {
+    public void reload() {
         PvPToggle plugin = PvPToggle.getInstance();
         plugin.reloadConfig();
         FileConfiguration config = plugin.getConfig();
@@ -101,11 +101,8 @@ public class ConfigManager {
             return true;
         }
 
-        if (PvPToggle.getInstance().getHook("WorldGuard").orElse(null) instanceof WorldGuardHook worldGuardHook) {
-            return !worldGuardHook.isRegionEnabled(world, location);
-        }
-
-        return false;
+        WorldGuardHook worldGuardHook = PvPToggle.getInstance().getWorldGuardHook().orElse(null);
+        return worldGuardHook != null && !worldGuardHook.isRegionEnabled(world, location);
     }
 
     public boolean isWorldIgnored(String worldName) {
@@ -134,6 +131,6 @@ public class ConfigManager {
     }
 
     public void sendMessage(CommandSender sender, String messageName) {
-        ChatColorHandler.sendMessage(sender, getMessage(messageName));
+        PaperColor.handler().sendMessage(sender, getMessage(messageName));
     }
 }

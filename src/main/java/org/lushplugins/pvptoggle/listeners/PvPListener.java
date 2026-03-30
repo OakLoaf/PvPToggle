@@ -6,7 +6,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.lushplugins.lushlib.libraries.chatcolor.ChatColorHandler;
+import org.lushplugins.lushlib.libraries.chatcolor.paper.PaperColor;
 import org.lushplugins.pvptoggle.PvPToggle;
 import org.lushplugins.pvptoggle.api.PvPToggleAPI;
 import org.lushplugins.pvptoggle.data.CooldownManager;
@@ -107,7 +107,7 @@ public class PvPListener implements Listener {
             PvPUser damaged = PvPToggle.getInstance().getDataManager().getPvPUser(damagedPlayer);
             if (!damaged.isPvPEnabled() ) {
                 event.setIntensity(damagedPlayer, 0.0D);
-                ChatColorHandler.sendMessage(damagerPlayer,
+                PaperColor.handler().sendMessage(damagerPlayer,
                     PvPToggle.getInstance().getConfigManager().getMessage("pvp-disabled-other")
                         .replace("%player%", damagedPlayer.getName()));
                 continue;
@@ -200,7 +200,7 @@ public class PvPListener implements Listener {
                 orElse.run();
 
                 if (!silent) {
-                    ChatColorHandler.sendMessage(damagerPlayer, PvPToggle.getInstance().getConfigManager().getMessage("pvp-disabled-other")
+                    PaperColor.handler().sendMessage(damagerPlayer, PvPToggle.getInstance().getConfigManager().getMessage("pvp-disabled-other")
                         .replace("%player%", damagedPlayer.getName()));
                 }
             }
@@ -208,7 +208,7 @@ public class PvPListener implements Listener {
                 orElse.run();
 
                 if (!silent) {
-                    ChatColorHandler.sendMessage(damagerPlayer, PvPToggle.getInstance().getConfigManager().getMessage("pvp-blocked-other")
+                    PaperColor.handler().sendMessage(damagerPlayer, PvPToggle.getInstance().getConfigManager().getMessage("pvp-blocked-other")
                         .replace("%player%", damagedPlayer.getName()));
                 }
             }

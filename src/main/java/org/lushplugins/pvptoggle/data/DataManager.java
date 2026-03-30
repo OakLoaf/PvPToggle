@@ -1,6 +1,5 @@
 package org.lushplugins.pvptoggle.data;
 
-import org.lushplugins.lushlib.manager.Manager;
 import org.lushplugins.pvptoggle.PvPToggle;
 import org.bukkit.entity.Player;
 import org.enchantedskies.EnchantedStorage.IOHandler;
@@ -13,21 +12,19 @@ import java.util.HashSet;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
-public class DataManager extends Manager {
+public class DataManager {
     private IOHandler<PvPUser, UUID> ioHandler;
     private final HashMap<UUID, PvPUser> uuidToPvPUser = new HashMap<>();
     private final HashSet<UUID> pvpEnabledPlayers = new HashSet<>();
 
-    @Override
-    public void onEnable() {
+    public void enable() {
         if (PvPToggle.getInstance().getConfigManager().isPvPStateRemembered()) {
             ioHandler = new IOHandler<>(new YmlStorage());
             ioHandler.enable();
         }
     }
 
-    @Override
-    public void onDisable() {
+    public void disable() {
         if (ioHandler != null) {
             ioHandler.disable();
             ioHandler = null;

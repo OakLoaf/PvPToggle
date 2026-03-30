@@ -82,7 +82,7 @@ public class PvPCommand {
     @Subcommand("reload")
     @CommandPermission("pvptoggle.admin.reload")
     public String reload() {
-        PvPToggle.getInstance().getConfigManager().reloadConfig();
+        PvPToggle.getInstance().getConfigManager().reload();
         return PvPToggle.getInstance().getConfigManager().getMessage("reload");
     }
 
