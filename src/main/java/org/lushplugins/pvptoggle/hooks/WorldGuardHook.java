@@ -10,7 +10,6 @@ import com.sk89q.worldguard.protection.flags.registry.FlagRegistry;
 import com.sk89q.worldguard.protection.managers.RegionManager;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import com.sk89q.worldguard.protection.regions.RegionContainer;
-import org.lushplugins.lushlib.hook.Hook;
 import org.lushplugins.pvptoggle.PvPToggle;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -20,15 +19,10 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Comparator;
 import java.util.List;
 
-public class WorldGuardHook extends Hook {
+public class WorldGuardHook {
     private static StateFlag PVP_TOGGLE_FLAG;
 
     public WorldGuardHook() {
-        super("WorldGuard");
-    }
-
-    @Override
-    public void onEnable() {
         if (PVP_TOGGLE_FLAG == null) {
             PVP_TOGGLE_FLAG = registerStateFlag("pvp-toggle", true);
         }
@@ -43,15 +37,7 @@ public class WorldGuardHook extends Hook {
         PvPToggle.getInstance().getConfigManager().sendMessage(player, isRegionEnabled(player) ? "pvp-region-enabled" : "pvp-region-disabled");
     }
 
-    public boolean isRegionEnabled(@NotNull Player player) {
-        return isRegionEnabled(player.getWorld(), player.getLocation());
-    }
-
-    public boolean isRegionEnabled(@NotNull World world, @NotNull Location location) {
-        return getRegionFlagState(world, location, PVP_TOGGLE_FLAG);
-    }
-
-    private boolean getRegionFlagState(@NotNull World world, @NotNull Location location, @NotNull StateFlag flag) {
+    private boolean isFlagEnabled(@NotNull World world, @NotNull Location location, @NotNull StateFlag flag) {
         RegionContainer container = WorldGuard.getInstance().getPlatform().getRegionContainer();
         RegionManager regionManager = container.get(BukkitAdapter.adapt(world));
         if (regionManager == null) {
@@ -64,12 +50,20 @@ public class WorldGuardHook extends Hook {
             return true;
         }
 
-        ProtectedRegion region = regions.get(0);
+        ProtectedRegion region = regions.getFirst();
         StateFlag.State state = region.getFlag(flag);
         return state == null || state.equals(StateFlag.State.ALLOW);
     }
 
-    private StateFlag registerStateFlag(@NotNull String name, boolean def) {
+    public boolean isRegionEnabled(@NotNull World world, @NotNull Location location) {
+        return isFlagEnabled(world, location, PVP_TOGGLE_FLAG);
+    }
+
+    public boolean isRegionEnabled(@NotNull Player player) {
+        return isRegionEnabled(player.getWorld(), player.getLocation());
+    }
+
+    private static StateFlag registerStateFlag(@NotNull String name, boolean def) {
         FlagRegistry registry = WorldGuard.getInstance().getFlagRegistry();
         try {
             StateFlag flag = new StateFlag(name, def);

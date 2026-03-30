@@ -2,7 +2,7 @@ package org.lushplugins.pvptoggle.command;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.lushplugins.lushlib.libraries.chatcolor.ChatColorHandler;
+import org.lushplugins.lushlib.libraries.chatcolor.paper.PaperColor;
 import org.lushplugins.pvptoggle.PvPToggle;
 import org.lushplugins.pvptoggle.data.CooldownManager;
 import revxrsal.commands.annotation.Command;
@@ -49,7 +49,7 @@ public class ToggleCommand {
         UUID targetUUID = target.getUniqueId();
         if (timeTillExecute > 0) {
             processing.add(targetUUID);
-            ChatColorHandler.sendMessage(target, PvPToggle.getInstance().getConfigManager().getMessage("command-timer")
+            PaperColor.handler().sendMessage(target, PvPToggle.getInstance().getConfigManager().getMessage("command-timer")
                 .replace("%seconds%", String.valueOf(timeTillExecute)));
         }
 
@@ -66,7 +66,7 @@ public class ToggleCommand {
             }
 
             if (actor.asPlayer() != finalTarget) {
-                ChatColorHandler.sendMessage(actor.sender(), PvPToggle.getInstance().getConfigManager().getMessage("pvp-state-changed-other")
+                PaperColor.handler().sendMessage(actor.sender(), PvPToggle.getInstance().getConfigManager().getMessage("pvp-state-changed-other")
                     .replace("%player%", finalTarget.getName())
                     .replace("%pvp_state%", String.valueOf(newState)));
             }

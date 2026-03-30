@@ -2,7 +2,6 @@ package org.lushplugins.pvptoggle.listeners;
 
 import org.bukkit.event.Listener;
 import org.lushplugins.pvptoggle.PvPToggle;
-import org.lushplugins.pvptoggle.hooks.WorldGuardHook;
 import org.bukkit.*;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -69,12 +68,12 @@ public class PlayerListener implements Listener {
             return;
         }
 
-        if (PvPToggle.getInstance().getHook("WorldGuard").orElse(null) instanceof WorldGuardHook worldGuardHook) {
+        PvPToggle.getInstance().getWorldGuardHook().ifPresent((hook) -> {
             Player player = event.getPlayer();
-            if (worldGuardHook.isRegionEnabled(player.getWorld(), event.getFrom()) != worldGuardHook.isRegionEnabled(player.getWorld(), event.getTo())) {
-                Bukkit.getScheduler().runTaskLater(PvPToggle.getInstance(), () -> worldGuardHook.checkPvPRegion(player), 1);
+            if (hook.isRegionEnabled(player.getWorld(), event.getFrom()) != hook.isRegionEnabled(player.getWorld(), event.getTo())) {
+                Bukkit.getScheduler().runTaskLater(PvPToggle.getInstance(), () -> hook.checkPvPRegion(player), 1);
             }
-        }
+        });
     }
 
     private void checkPvPWorld(@NotNull Player player) {

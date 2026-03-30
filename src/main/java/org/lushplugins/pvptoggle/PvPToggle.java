@@ -1,8 +1,6 @@
 package org.lushplugins.pvptoggle;
 
-import org.lushplugins.lushlib.LushLib;
-import org.lushplugins.lushlib.hook.Hook;
-import org.lushplugins.lushlib.plugin.SpigotPlugin;
+import org.lushplugins.lushlib.utils.plugin.SpigotPlugin;
 import org.lushplugins.placeholderhandler.PlaceholderHandler;
 import org.lushplugins.pluginupdater.api.updater.Updater;
 import org.lushplugins.pvptoggle.command.PvPCommand;
@@ -21,9 +19,12 @@ import revxrsal.commands.Lamp;
 import revxrsal.commands.bukkit.BukkitLamp;
 import revxrsal.commands.bukkit.actor.BukkitCommandActor;
 
+import java.util.Optional;
+
 public final class PvPToggle extends SpigotPlugin {
     private static PvPToggle plugin;
 
+    private WorldGuardHook worldGuardHook;
     private CooldownManager cooldownManager;
     private ConfigManager configManager;
     private DataManager dataManager;
@@ -32,9 +33,8 @@ public final class PvPToggle extends SpigotPlugin {
     @Override
     public void onLoad() {
         plugin = this;
-        LushLib.getInstance().enable(this);
 
-        ifPluginPresent("WorldGuard", () -> registerHook(new WorldGuardHook()));
+        ifPluginPresent("WorldGuard", () -> this.worldGuardHook = new WorldGuardHook());
     }
 
     @Override
@@ -42,7 +42,7 @@ public final class PvPToggle extends SpigotPlugin {
         cooldownManager = new CooldownManager();
 
         configManager = new ConfigManager();
-        configManager.reloadConfig();
+        configManager.reload();
 
         dataManager = new DataManager();
         dataManager.enable();
@@ -88,6 +88,10 @@ public final class PvPToggle extends SpigotPlugin {
         }
     }
 
+    public Optional<WorldGuardHook> getWorldGuardHook() {
+        return Optional.ofNullable(worldGuardHook);
+    }
+
     public CooldownManager getCooldownManager() {
         return cooldownManager;
     }
@@ -102,11 +106,6 @@ public final class PvPToggle extends SpigotPlugin {
 
     public Updater getUpdater() {
         return updater;
-    }
-
-    public void registerHook(Hook hook) {
-        hooks.put(hook.getId(), hook);
-        hook.enable();
     }
 
     public static PvPToggle getInstance() {
