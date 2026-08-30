@@ -25,7 +25,7 @@ repositories {
 
 dependencies {
     // Dependencies
-    compileOnly("org.spigotmc:spigot-api:26.1.2-R0.1-SNAPSHOT")
+    compileOnly("org.spigotmc:spigot-api:26.2-R0.1-SNAPSHOT")
 
     // Soft Dependencies
     compileOnly("com.sk89q.worldguard:worldguard-bukkit:7.0.17")
