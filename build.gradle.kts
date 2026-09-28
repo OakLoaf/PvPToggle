@@ -31,11 +31,11 @@ dependencies {
     compileOnly("com.sk89q.worldguard:worldguard-bukkit:7.0.17")
 
     // Libraries
-    implementation("org.lushplugins:LushLib:1.0.0")
+    implementation("org.lushplugins:LushLib:1.0.1")
     implementation("org.enchantedskies:EnchantedStorage:3.0.0") // TODO: Migrate away from
     implementation("io.github.revxrsal:lamp.common:4.0.0-rc.18")
     implementation("io.github.revxrsal:lamp.bukkit:4.0.0-rc.18")
-    implementation("org.lushplugins:PlaceholderHandler:1.0.0-alpha10")
+    implementation("org.lushplugins:PlaceholderHandler:1.0.1-alpha10")
     implementation("org.lushplugins.pluginupdater:PluginUpdater-API:2.0.0")
 }
 
